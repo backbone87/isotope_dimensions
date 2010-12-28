@@ -54,3 +54,42 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions_max'] = array
 	'attributes'			=> array('legend'=>'pricing_legend'),
 );
 
+
+class tl_iso_products_dimensions extends Controller
+{
+	
+	public function validateX($varValue, $objProduct)
+	{
+		if (TL_MODE == 'FE' && $objProduct instanceof DimensionProduct)
+		{
+			if (is_array($objProduct->dimensions_min) && $objProduct->dimensions_min[0] > $varValue)
+			{
+				throw new Exception(sprintf($GLOBALS['ISO_LANG']['ERR']['dimensionMinWidth'], $objProduct->dimensions_min[0]));
+			}
+			elseif (is_array($objProduct->dimensions_max) && $objProduct->dimensions_max[0] < $varValue)
+			{
+				throw new Exception(sprintf($GLOBALS['ISO_LANG']['ERR']['dimensionMaxWidth'], $objProduct->dimensions_max[0]));
+			}
+		}
+		
+		return $varValue;
+	}
+	
+	public function validateY($varValue, $objProduct)
+	{
+		if (TL_MODE == 'FE' && $objProduct instanceof DimensionProduct)
+		{
+			if (is_array($objProduct->dimensions_min) && $objProduct->dimensions_min[1] > $varValue)
+			{
+				throw new Exception(sprintf($GLOBALS['ISO_LANG']['ERR']['dimensionMinHeight'], $objProduct->dimensions_min[1]));
+			}
+			elseif (is_array($objProduct->dimensions_max) && $objProduct->dimensions_max[1] < $varValue)
+			{
+				throw new Exception(sprintf($GLOBALS['ISO_LANG']['ERR']['dimensionMaxHeight'], $objProduct->dimensions_max[1]));
+			}
+		}
+		
+		return $varValue;
+	}
+}
+

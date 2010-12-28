@@ -29,6 +29,36 @@
 class DimensionProduct extends IsotopeProduct
 {
 	
+	public function __construct($arrData, $arrOptions=null, $blnLocked=false)
+	{
+		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_x'] = array
+		(
+			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_x'],
+			'inputType'				=> 'text',
+			'eval'					=> array('mandatory'=>true),
+			'attributes'			=> array('is_customer_defined'=>true),
+			'save_callback' => array
+			(
+				array('tl_iso_products_dimensions', 'validateX'),
+			),
+		);
+		
+		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_y'] = array
+		(
+			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_y'],
+			'inputType'				=> 'text',
+			'eval'					=> array('mandatory'=>true),
+			'attributes'			=> array('is_customer_defined'=>true),
+			'save_callback' => array
+			(
+				array('tl_iso_products_dimensions', 'validateY'),
+			),
+		);
+		
+		parent::__construct($arrData, $arrOptions, $blnLocked);
+	}
+	
+	
 	/**
 	 * Get a property
 	 * @return mixed
@@ -37,51 +67,22 @@ class DimensionProduct extends IsotopeProduct
 	{
 		switch( $strKey )
 		{
+			case 'dimension_x':
+			case 'dimension_y':
+				return (float)$this->arrOptions[$strKey];
+				break;
+				
 			case 'price':
-				$intPrice = 0;
-				$arrMin = deserialize($this->arrData['dimensions_min']);
-				$arrMax = deserialize($this->arrData['dimensions_max']);
-				if ($this->arrOptions['dimension_x'] >= $arrMin[0] && $this->arrOptions['dimension_x'] <= $arrMax[0] && $this->arrOptions['dimension_y'] >= $arrMin[1] && $this->arrOptions['dimension_y'] <= $arrMax[1])
-				{
-					$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $this->arrOptions['dimension_x'], $this->arrOptions['dimension_y']);
-					
-					if ($objPrice->numRows)
-					{
-						$intPrice = $objPrice->price;
-					}
-				}
+				$time = time();
+				$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $this->arrOptions['dimension_x'], $this->arrOptions['dimension_y']);
 				
-				if (!$intPrice)
-				{
-					$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $arrMin[0], $arrMin[1]);
-					
-					$intPrice = $objPrice->price;
-				}
-				
-				return $this->Isotope->calculatePrice($intPrice, $this, 'price', $this->arrData['tax_class']);
+				return $this->Isotope->calculatePrice((float)$objPrice->price, $this, 'price', $this->arrData['tax_class']);
 				break;
 		}
 		
 		return parent::__get($strKey);
 	}
 	
-	
-	/**
-	 * Set a property
-	 */
-	public function __set($strKey, $varValue)
-	{
-		switch( $strKey )
-		{
-			case 'dimension_x':
-			case 'dimension_y':
-				$this->arrData[$strKey] = $varValue;
-				break;
-				
-			default:
-				parent::__set($strKey, $varValue);
-		}
-	}
 	
 	/**
 	 * Return all attributes for this product
@@ -92,21 +93,6 @@ class DimensionProduct extends IsotopeProduct
 		
 		$arrData['dimension_x'] = intval($this->arrData['dimension_x']);
 		$arrData['dimension_y'] = intval($this->arrData['dimension_y']);
-		
-		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_x'] = array
-		(
-			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_x'],
-			'inputType'				=> 'text',
-			'eval'					=> array('mandatory'=>true),
-			'attributes'			=> array('is_customer_defined'	=> true),		);
-		
-		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_y'] = array
-		(
-			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_y'],
-			'inputType'				=> 'text',
-			'eval'					=> array('mandatory'=>true),
-			'attributes'			=> array('is_customer_defined'	=> true),
-		);
 			
 		return $arrData;
 	}

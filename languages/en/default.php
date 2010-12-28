@@ -27,7 +27,7 @@
 
 
 /**
- * Palettes
+ * Product types
  */
-$GLOBALS['TL_DCA']['tl_iso_producttypes']['palettes']['dimension']	= '{name_legend},name,class,fallback;{description_legend:hide},description;{template_legend},list_template,reader_template;{attributes_legend},attributes,variants;{download_legend:hide},downloads';
+$GLOBALS['TL_LANG']['ISO_PRODUCT']['dimension']		= array('Product with dimension price', 'The price for this product is calculated based on the user\'s choosen dimensions. You should setup dimension prices first!');
 

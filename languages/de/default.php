@@ -31,3 +31,12 @@
  */
 $GLOBALS['TL_LANG']['ISO_PRODUCT']['dimension']		= array('Product with dimension price', 'The price for this product is calculated based on the user\'s choosen dimensions. You should setup dimension prices first!');
 
+
+/**
+ * Errors
+ */
+$GLOBALS['ISO_LANG']['ERR']['dimensionMinWidth']	= 'Die minimale Breite beträgt %s';
+$GLOBALS['ISO_LANG']['ERR']['dimensionMaxWidth']	= 'Die maximale Breite beträgt %s';
+$GLOBALS['ISO_LANG']['ERR']['dimensionMinHeight']	= 'Die minimale Höhe beträgt %s';
+$GLOBALS['ISO_LANG']['ERR']['dimensionMaxHeight']	= 'Die maximale Höhe beträgt %s';
+
