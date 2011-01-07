@@ -51,4 +51,6 @@ $GLOBALS['ISO_PRODUCT']['dimension'] = array
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions_min';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions_max';
+$GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'area_min';
+$GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'area_max';
 

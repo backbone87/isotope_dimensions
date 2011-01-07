@@ -30,6 +30,9 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_product_dimensions']['name']			= array('Name', 'Bitte geben Sie den Namen ein.');
+$GLOBALS['TL_LANG']['tl_product_dimensions']['mode']			= array('Berechnung', 'Bitte wählen Sie eine Berechnungsart.');
+$GLOBALS['TL_LANG']['tl_product_dimensions']['multiply_per']	= array('Berechnungsfaktor', 'Geben Sie den Berechnungsfaktor ein (z.B. 100 * 100cm = 1m2, Faktor 1\'000\'000 = Preis * m2)');
+$GLOBALS['TL_LANG']['tl_product_dimensions']['unit']			= array('Einheit', 'Bitte wählen Sie die Masseinheit.');
 
 
 /**
@@ -46,4 +49,16 @@ $GLOBALS['TL_LANG']['tl_product_dimensions']['show']			= array('Preisgruppendeta
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_product_dimensions']['name_legend']		= 'Name';
+$GLOBALS['TL_LANG']['tl_product_dimensions']['config_legend']	= 'Konfiguration';
+
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_product_dimensions']['dimensions']		= 'Breite & Höhe';
+$GLOBALS['TL_LANG']['tl_product_dimensions']['area']			= 'Fläche';
+$GLOBALS['TL_LANG']['tl_product_dimensions']['mm']				= 'Milimeter (mm)';
+$GLOBALS['TL_LANG']['tl_product_dimensions']['cm']				= 'Centimeter (cm)';
+$GLOBALS['TL_LANG']['tl_product_dimensions']['m']				= 'Meter (m)';
+$GLOBALS['TL_LANG']['tl_product_dimensions']['km']				= 'Kilometer (km)';
 

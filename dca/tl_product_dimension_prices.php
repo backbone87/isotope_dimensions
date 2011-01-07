@@ -38,6 +38,10 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 		'dataContainer'					=> 'Table',
 		'enableVersioning'				=> true,
 		'ptable'						=> 'tl_product_dimensions',
+		'onload_callback' => array
+		(
+			array('tl_product_dimension_prices', 'selectPalette'),
+		),
 	),
 
 	// List
@@ -49,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 			'fields'					=> array('dimension_x', 'dimension_y'),
 			'flag'						=> 1,
 			'panelLayout'				=> 'filter;search,limit',
-			'headerFields'				=> array('name'),
+			'headerFields'				=> array('name', 'mode', 'unit'),
 			'disableGrouping'			=> true,
 			'child_record_callback'		=> array('tl_product_dimension_prices', 'listPrice')
 		),
@@ -96,7 +100,8 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'						=> '{dimension_legend},dimension_x,dimension_y;{price_legend},price;{publish_legend},published,start,stop',
+		'dimensions'					=> '{dimension_legend},dimension_x,dimension_y;{price_legend},price;{publish_legend},published,start,stop',
+		'area'							=> '{dimension_legend},area;{price_legend},price;{publish_legend},published,start,stop',
 	),
 
 	// Fields
@@ -108,7 +113,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 			'exclude'					=> true,
 			'filter'					=> true,
 			'inputType'					=> 'text',
-			'eval'						=> array('mandatory'=>true, 'maxlength'=>12, 'rgxp'=>'digits', 'tl_class'=>'w50'),
+			'eval'						=> array('mandatory'=>true, 'maxlength'=>21, 'rgxp'=>'digits', 'tl_class'=>'w50'),
 		),
 		'dimension_y' => array
 		(
@@ -116,7 +121,15 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 			'exclude'					=> true,
 			'filter'					=> true,
 			'inputType'					=> 'text',
-			'eval'						=> array('mandatory'=>true, 'maxlength'=>12, 'rgxp'=>'digits', 'tl_class'=>'w50'),
+			'eval'						=> array('mandatory'=>true, 'maxlength'=>21, 'rgxp'=>'digits', 'tl_class'=>'w50'),
+		),
+		'area' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['area'],
+			'exclude'					=> true,
+			'filter'					=> true,
+			'inputType'					=> 'text',
+			'eval'						=> array('mandatory'=>true, 'maxlength'=>21, 'rgxp'=>'digits', 'tl_class'=>'w50'),
 		),
 		'price' => array
 		(
@@ -179,8 +192,46 @@ class tl_product_dimension_prices extends Backend
 		{
 			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_product_dimension_prices']['labelStop'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['stop'])) . ']</span>';
 		}
-
-		return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s x %s: %s%s</div>', $this->getTheme(), $image, round($row['dimension_x'], 3), round($row['dimension_y'], 3), $this->Isotope->formatPriceWithCurrency($row['price'], false), $strStartStop);
+		
+		$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_product_dimensions WHERE id={$row['pid']}");
+		
+		if ($objConfig->mode == 'area')
+		{
+			return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">< %s%s<sup>2</sup>: %s%s</div>', $this->getTheme(), $image, number_format($row['area'], 0, $GLOBALS['TL_LANG']['MSC']['decimalSeparator'], $GLOBALS['TL_LANG']['MSC']['thousandsSeparator']), $objConfig->unit, $this->Isotope->formatPriceWithCurrency($row['price'], false), $strStartStop);
+		}
+		else
+		{
+			return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s%s x %s%s: %s%s</div>', $this->getTheme(), $image, number_format($row['dimension_x'], 0, $GLOBALS['TL_LANG']['MSC']['decimalSeparator'], $GLOBALS['TL_LANG']['MSC']['thousandsSeparator']), $objConfig->unit, number_format($row['dimension_y'], 0, $GLOBALS['TL_LANG']['MSC']['decimalSeparator'], $GLOBALS['TL_LANG']['MSC']['thousandsSeparator']), $objConfig->unit, $this->Isotope->formatPriceWithCurrency($row['price'], false), $strStartStop);
+		}
+	}
+	
+	
+	public function selectPalette($dc)
+	{
+		if ($this->Input->get('act') != 'create')
+		{
+			$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_product_dimensions WHERE id=(SELECT pid FROM tl_product_dimension_prices WHERE id={$dc->id})");
+			
+			$GLOBALS['TL_DCA']['tl_product_dimension_prices']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_product_dimension_prices']['palettes'][$objConfig->mode];
+			
+			switch( $objConfig->mode )
+			{
+				case 'area':
+					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_x']);
+					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_y']);
+					
+					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['area']['label'][0] .= " ({$objConfig->unit})";
+					break;
+					
+				case 'dimensions':
+				default:
+					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['area']);
+					
+					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_x']['label'][0] .= " ({$objConfig->unit})";
+					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_y']['label'][0] .= " ({$objConfig->unit})";
+					break;
+			}
+		}
 	}
 }
 

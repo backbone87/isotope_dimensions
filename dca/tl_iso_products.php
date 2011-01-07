@@ -54,6 +54,22 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions_max'] = array
 	'attributes'			=> array('legend'=>'pricing_legend'),
 );
 
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['area_min'] = array
+(
+	'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['area_min'],
+	'inputType'				=> 'text',
+	'eval'					=> array('mandatory'=>true, 'rgxp'=>'digits', 'tl_class'=>'w50'),
+	'attributes'			=> array('legend'=>'pricing_legend'),
+);
+
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['area_max'] = array
+(
+	'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['area_max'],
+	'inputType'				=> 'text',
+	'eval'					=> array('mandatory'=>true, 'rgxp'=>'digits', 'tl_class'=>'w50'),
+	'attributes'			=> array('legend'=>'pricing_legend'),
+);
+
 
 class tl_iso_products_dimensions extends Controller
 {

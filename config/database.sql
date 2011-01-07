@@ -15,6 +15,9 @@ CREATE TABLE `tl_product_dimensions` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
+  `mode` varchar(16) NOT NULL default '',
+  `unit` varchar(4) NOT NULL default '',
+  `multiply_per` decimal(21,3) unsigned NOT NULL default '0.000',
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -29,9 +32,10 @@ CREATE TABLE `tl_product_dimension_prices` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
-  `dimension_x` decimal(9,3) unsigned NOT NULL default '0.000',
-  `dimension_y` decimal(9,3) unsigned NOT NULL default '0.000',
-  `price` decimal(9,3) unsigned NOT NULL default '0.000',
+  `dimension_x` decimal(21,3) unsigned NOT NULL default '0.000',
+  `dimension_y` decimal(21,3) unsigned NOT NULL default '0.000',
+  `area` decimal(21,3) unsigned NOT NULL default '0.000',
+  `price` decimal(21,3) unsigned NOT NULL default '0.000',
   `published` char(1) NOT NULL default '',
   `start` varchar(10) NOT NULL default '',
   `stop` varchar(10) NOT NULL default '',
@@ -49,5 +53,7 @@ CREATE TABLE `tl_iso_products` (
   `dimensions` int(10) unsigned NOT NULL default '0',
   `dimensions_min` blob NULL,
   `dimensions_max` blob NULL,
+  `area_min` decimal(21,3) unsigned NOT NULL default '0.000',
+  `area_max` decimal(21,3) unsigned NOT NULL default '0.000',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

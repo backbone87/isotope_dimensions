@@ -31,6 +31,7 @@
  */
 $GLOBALS['TL_LANG']['tl_product_dimension_prices']['dimension_x']		= array('Breite', 'Geben Sie die Breite ein.');
 $GLOBALS['TL_LANG']['tl_product_dimension_prices']['dimension_y']		= array('Höhe', 'Geben Sie die Höhe ein.');
+$GLOBALS['TL_LANG']['tl_product_dimension_prices']['area']				= array('Fläche', 'Geben Sie die Fläche ein.');
 $GLOBALS['TL_LANG']['tl_product_dimension_prices']['price']				= array('Preis', 'Geben Sie den Preis ein.');
 $GLOBALS['TL_LANG']['tl_product_dimension_prices']['published']			= array('Veröffentlichen', 'Den Preis bei der Berechnung berücksichtigen.');
 $GLOBALS['TL_LANG']['tl_product_dimension_prices']['start']				= array('Verwenden ab', 'Den Preis erst ab diesem Tag berücksichtigen.');

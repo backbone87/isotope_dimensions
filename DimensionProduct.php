@@ -74,7 +74,23 @@ class DimensionProduct extends IsotopeProduct
 				
 			case 'price':
 				$time = time();
-				$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $this->arrOptions['dimension_x'], $this->arrOptions['dimension_y']);
+				$objGroup = $this->Database->execute("SELECT * FROM tl_product_dimensions WHERE id={$this->arrData['dimensions']}");
+				
+				if ($objGroup->mode == 'area')
+				{
+					$fltArea = $this->arrOptions['dimension_x'] * $this->arrOptions['dimension_y'];
+					$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND area >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY area")->limit(1)->execute($this->arrData['dimensions'], $fltArea);
+					
+					if ($objGroup->multiply_per > 0)
+					{
+						$intFactor = ceil($fltArea / $objGroup->multiply_per);
+						return $this->Isotope->calculatePrice(((float)$objPrice->price * $intFactor), $this, 'price', $this->arrData['tax_class']);
+					}
+				}
+				else
+				{
+					$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $this->arrOptions['dimension_x'], $this->arrOptions['dimension_y']);
+				}
 				
 				return $this->Isotope->calculatePrice((float)$objPrice->price, $this, 'price', $this->arrData['tax_class']);
 				break;
