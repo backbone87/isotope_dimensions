@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation, either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program. If not, please visit the Free
  * Software Foundation website at http://www.gnu.org/licenses/.
@@ -73,7 +73,7 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['area_max'] = array
 
 class tl_iso_products_dimensions extends Controller
 {
-	
+
 	public function validateX($varValue, $objProduct)
 	{
 		if (TL_MODE == 'FE' && $objProduct instanceof DimensionProduct)
@@ -87,10 +87,10 @@ class tl_iso_products_dimensions extends Controller
 				throw new Exception(sprintf($GLOBALS['ISO_LANG']['ERR']['dimensionMaxWidth'], $objProduct->dimensions_max[0]));
 			}
 		}
-		
+
 		return $varValue;
 	}
-	
+
 	public function validateY($varValue, $objProduct)
 	{
 		if (TL_MODE == 'FE' && $objProduct instanceof DimensionProduct)
@@ -104,7 +104,7 @@ class tl_iso_products_dimensions extends Controller
 				throw new Exception(sprintf($GLOBALS['ISO_LANG']['ERR']['dimensionMaxHeight'], $objProduct->dimensions_max[1]));
 			}
 		}
-		
+
 		return $varValue;
 	}
 }

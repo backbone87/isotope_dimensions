@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation, either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this program. If not, please visit the Free
  * Software Foundation website at http://www.gnu.org/licenses/.
@@ -171,14 +171,14 @@ class tl_product_dimension_prices extends Backend
 	public function listPrice($row)
 	{
 		$this->import('Isotope');
-		
+
 		$image = 'published';
 
 		if (!$row['published'] || (strlen($row['start']) && $row['start'] > time()) || (strlen($row['stop']) && $row['stop'] < time()))
 		{
 			$image = 'un'.$image;
 		}
-		
+
 		$strStartStop = '';
 		if (strlen($row['start']) && strlen($row['stop']))
 		{
@@ -192,9 +192,9 @@ class tl_product_dimension_prices extends Backend
 		{
 			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_product_dimension_prices']['labelStop'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['stop'])) . ']</span>';
 		}
-		
+
 		$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_product_dimensions WHERE id={$row['pid']}");
-		
+
 		if ($objConfig->mode == 'area')
 		{
 			return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">< %s%s<sup>2</sup>: %s%s</div>', $this->getTheme(), $image, number_format($row['area'], 0, $GLOBALS['TL_LANG']['MSC']['decimalSeparator'], $GLOBALS['TL_LANG']['MSC']['thousandsSeparator']), $objConfig->unit, $this->Isotope->formatPriceWithCurrency($row['price'], false), $strStartStop);
@@ -204,29 +204,29 @@ class tl_product_dimension_prices extends Backend
 			return sprintf('<div class="list_icon" style="background-image:url(\'system/themes/%s/images/%s.gif\');">%s%s x %s%s: %s%s</div>', $this->getTheme(), $image, number_format($row['dimension_x'], 0, $GLOBALS['TL_LANG']['MSC']['decimalSeparator'], $GLOBALS['TL_LANG']['MSC']['thousandsSeparator']), $objConfig->unit, number_format($row['dimension_y'], 0, $GLOBALS['TL_LANG']['MSC']['decimalSeparator'], $GLOBALS['TL_LANG']['MSC']['thousandsSeparator']), $objConfig->unit, $this->Isotope->formatPriceWithCurrency($row['price'], false), $strStartStop);
 		}
 	}
-	
-	
+
+
 	public function selectPalette($dc)
 	{
 		if ($this->Input->get('act') != 'create')
 		{
 			$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_product_dimensions WHERE id=(SELECT pid FROM tl_product_dimension_prices WHERE id={$dc->id})");
-			
+
 			$GLOBALS['TL_DCA']['tl_product_dimension_prices']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_product_dimension_prices']['palettes'][$objConfig->mode];
-			
+
 			switch( $objConfig->mode )
 			{
 				case 'area':
 					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_x']);
 					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_y']);
-					
+
 					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['area']['label'][0] .= " ({$objConfig->unit})";
 					break;
-					
+
 				case 'dimensions':
 				default:
 					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['area']);
-					
+
 					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_x']['label'][0] .= " ({$objConfig->unit})";
 					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_y']['label'][0] .= " ({$objConfig->unit})";
 					break;

@@ -7,9 +7,9 @@
 -- *                                                        *
 -- **********************************************************
 
--- 
+--
 -- Table `tl_product_dimensions`
--- 
+--
 
 CREATE TABLE `tl_product_dimensions` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -24,9 +24,9 @@ CREATE TABLE `tl_product_dimensions` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table `tl_product_dimension_prices`
--- 
+--
 
 CREATE TABLE `tl_product_dimension_prices` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -45,9 +45,9 @@ CREATE TABLE `tl_product_dimension_prices` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table `tl_iso_products`
--- 
+--
 
 CREATE TABLE `tl_iso_products` (
   `dimensions` int(10) unsigned NOT NULL default '0',
