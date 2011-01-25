@@ -74,22 +74,61 @@ class DimensionProduct extends IsotopeProduct
 
 			case 'price':
 				$time = time();
-				$objGroup = $this->Database->execute("SELECT * FROM tl_product_dimensions WHERE id={$this->arrData['dimensions']}");
+				$objGroup = $this->Database->execute("SELECT * FROM tl_product_dimensions WHERE id=" . (int)$this->arrData['dimensions']);
+				
+				$arrDimension = array('x'=>($this->arrOptions['dimension_x']*$this->quantity_requested), 'y'=>($this->arrOptions['dimension_y']*$this->quantity_requested));
+				
+				if ($objGroup->summarizeSize == 'product' || $objGroup->summarizeSize == 'variant' || $objGroup->summarizeSize == 'type')
+				{
+					foreach( $this->Isotope->Cart->getProducts() as $objProduct )
+					{
+						if (!($objProduct instanceof DimensionProduct) || $objProduct->cart_id == $this->cart_id)
+							continue;
 
+						switch( $objGroup->summarizeSize )
+						{
+							case 'product':
+								if ($objProduct->id == $this->id || ($objProduct->pid > 0 && $objProduct->pid == $this->pid))
+								{
+									$arrDimension['x'] += ($objProduct->dimension_x * $objProduct->quantity_requested);
+									$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
+								}
+								break;
+		
+							case 'variant':
+								if ($objProduct->id == $this->id)
+								{
+									$arrDimension['x'] += ($objProduct->dimension_x * $objProduct->quantity_requested);
+									$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
+								}
+								break;
+		
+							case 'type':
+								if ($objProduct->type == $this->type)
+								{
+									$arrDimension['x'] += ($objProduct->dimension_x * $objProduct->quantity_requested);
+									$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
+								}
+								break;
+						}
+					}
+				}
+				
 				if ($objGroup->mode == 'area')
 				{
-					$fltArea = $this->arrOptions['dimension_x'] * $this->arrOptions['dimension_y'];
+					$fltArea = $arrDimension['x'] * $arrDimension['y'];
 					$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND area >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY area")->limit(1)->execute($this->arrData['dimensions'], $fltArea);
 
 					if ($objGroup->multiply_per > 0)
 					{
-						$intFactor = ceil($fltArea / $objGroup->multiply_per);
+						$intFactor = ceil(($this->arrOptions['dimension_x'] * $this->arrOptions['dimension_y']) / $objGroup->multiply_per);
+
 						return $this->Isotope->calculatePrice(((float)$objPrice->price * $intFactor), $this, 'price', $this->arrData['tax_class']);
 					}
 				}
 				else
 				{
-					$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $this->arrOptions['dimension_x'], $this->arrOptions['dimension_y']);
+					$objPrice = $this->Database->prepare("SELECT * FROM tl_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $arrDimension['x'], $arrDimension['y']);
 				}
 
 				return $this->Isotope->calculatePrice((float)$objPrice->price, $this, 'price', $this->arrData['tax_class']);

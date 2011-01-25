@@ -18,6 +18,7 @@ CREATE TABLE `tl_product_dimensions` (
   `mode` varchar(16) NOT NULL default '',
   `unit` varchar(4) NOT NULL default '',
   `multiply_per` decimal(21,3) unsigned NOT NULL default '0.000',
+  `summarizeSize` varchar(8) NOT NULL default '',
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

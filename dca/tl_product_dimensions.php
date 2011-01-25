@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'						=> '{name_legend},name;{config_legend},mode,multiply_per,unit',
+		'default'						=> '{name_legend},name;{config_legend},mode,multiply_per,unit;{price_legend},summarizeSize',
 	),
 
 	// Fields
@@ -143,6 +143,16 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 			'inputType'					=> 'radio',
 			'default'					=> 'dimensions',
 			'options'					=> array('mm', 'cm', 'm', 'km'),
+			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
+			'eval'						=> array('mandatory'=>true, 'tl_class'=>'clr'),
+		),
+		'summarizeSize' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['summarizeSize'],
+			'filter'					=> true,
+			'inputType'					=> 'radio',
+			'default'					=> 'item',
+			'options'					=> array('item', 'product', 'variant', 'type'),
 			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
 			'eval'						=> array('mandatory'=>true, 'tl_class'=>'clr'),
 		),
