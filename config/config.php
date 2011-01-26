@@ -54,3 +54,9 @@ $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions_max';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'area_min';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'area_max';
 
+
+/**
+ * Hooks
+ */
+$GLOBALS['TL_HOOKS']['iso_generateProduct'][] = array('Dimensions', 'addPriceToProduct');
+

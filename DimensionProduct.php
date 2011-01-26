@@ -36,7 +36,7 @@ class DimensionProduct extends IsotopeProduct
 			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_x'],
 			'inputType'				=> 'text',
 			'eval'					=> array('mandatory'=>true),
-			'attributes'			=> array('is_customer_defined'=>true),
+			'attributes'			=> array('variant_option'=>true),
 			'save_callback' => array
 			(
 				array('tl_iso_products_dimensions', 'validateX'),
@@ -48,7 +48,7 @@ class DimensionProduct extends IsotopeProduct
 			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_y'],
 			'inputType'				=> 'text',
 			'eval'					=> array('mandatory'=>true),
-			'attributes'			=> array('is_customer_defined'=>true),
+			'attributes'			=> array('variant_option'=>true),
 			'save_callback' => array
 			(
 				array('tl_iso_products_dimensions', 'validateY'),
@@ -56,6 +56,9 @@ class DimensionProduct extends IsotopeProduct
 		);
 
 		parent::__construct($arrData, $arrOptions, $blnLocked);
+		
+		$this->arrVariantAttributes[] = 'dimension_x';
+		$this->arrVariantAttributes[] = 'dimension_y';
 	}
 
 
@@ -139,17 +142,15 @@ class DimensionProduct extends IsotopeProduct
 	}
 
 
-	/**
-	 * Return all attributes for this product
-	 */
-	public function getAttributes()
+	public function generateAjax(&$objModule)
 	{
-		$arrData = parent::getAttributes();
-
-		$arrData['dimension_x'] = intval($this->arrData['dimension_x']);
-		$arrData['dimension_y'] = intval($this->arrData['dimension_y']);
-
-		return $arrData;
+		$arrOptions = parent::generateAjax($objModule);
+		
+		$fltPrice = $this->price;
+		
+		$arrOptions[] = array('id'=>$this->formSubmit . '_price', 'html'=>('<div class="iso_attribute" id="' . $this->formSubmit . '_price">' . ($fltPrice > 0 ? $this->Isotope->formatPriceWithCurrency($fltPrice) : '') . '</div>'));
+		
+		return $arrOptions;
 	}
 }
 
