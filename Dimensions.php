@@ -33,7 +33,10 @@ class Dimensions extends Frontend
 	
 	public function addPriceToProduct($objTemplate, $objProduct)
 	{
-		$objTemplate->price = '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price"> </div>';
+		if ($objProduct instanceof DimensionProduct)
+		{
+			$objTemplate->price = '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price"> </div>';
+		}
 		
 		return $objTemplate;
 	}
