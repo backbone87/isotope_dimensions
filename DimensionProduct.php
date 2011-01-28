@@ -54,11 +54,17 @@ class DimensionProduct extends IsotopeProduct
 				array('tl_iso_products_dimensions', 'validateY'),
 			),
 		);
+		
+		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_area'] = array
+		(
+			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_area'],
+		);
 
 		parent::__construct($arrData, $arrOptions, $blnLocked);
 		
 		$this->arrVariantAttributes[] = 'dimension_x';
 		$this->arrVariantAttributes[] = 'dimension_y';
+		$this->arrVariantAttributes[] = 'dimension_area';
 	}
 
 
@@ -72,7 +78,21 @@ class DimensionProduct extends IsotopeProduct
 		{
 			case 'dimension_x':
 			case 'dimension_y':
+				if ($this->Environment->script == 'ajax.php')
+				{
+					return (float)$this->Input->post($strKey);
+				}
 				return (float)$this->arrOptions[$strKey];
+				break;
+			
+			case 'dimension_area':
+				if ($this->dimension_x == 0 || $this->dimension_y == 0)
+					return '';
+
+				$this->loadLanguageFile('tl_product_dimensions');
+				$objGroup = $this->Database->execute("SELECT * FROM tl_product_dimensions WHERE id=" . (int)$this->arrData['dimensions']);
+				
+				return $this->dimension_x * $this->dimension_y / 10000 . ' ' . $GLOBALS['TL_LANG']['tl_product_dimensions'][$objGroup->multiply_unit];
 				break;
 
 			case 'price':

@@ -35,6 +35,7 @@ array_insert($GLOBALS['BE_MOD']['isotope'], 1, array
 	(
 		'tables'		=> array('tl_product_dimensions', 'tl_product_dimension_prices'),
 		'icon'			=> 'system/modules/isotope_dimensions/html/icon-dimensions.png',
+		'stylesheet'	=> 'system/modules/isotope/html/backend.css',
 	),
 ));
 

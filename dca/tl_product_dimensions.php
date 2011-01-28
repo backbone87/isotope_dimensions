@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'						=> '{name_legend},name;{config_legend},mode,multiply_per,unit;{price_legend},summarizeSize',
+		'default'						=> '{name_legend},name;{config_legend},mode,multiply_per,unit,multiply_unit;{price_legend},summarizeSize',
 	),
 
 	// Fields
@@ -136,6 +136,16 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 			'inputType'					=> 'text',
 			'eval'						=> array('rgxp'=>'digit', 'maxlength'=>21, 'tl_class'=>'w50'),
 		),
+		'multiply_unit' => array
+		(
+			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['multiply_unit'],
+			'filter'					=> true,
+			'inputType'					=> 'radio',
+			'default'					=> 'dimensions',
+			'options'					=> array('qmm', 'qcm', 'qm', 'qkm'),
+			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
+			'eval'						=> array('mandatory'=>true, 'tl_class'=>'w50 w50h'),
+		),
 		'unit' => array
 		(
 			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['unit'],
@@ -144,7 +154,7 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 			'default'					=> 'dimensions',
 			'options'					=> array('mm', 'cm', 'm', 'km'),
 			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
-			'eval'						=> array('mandatory'=>true, 'tl_class'=>'clr'),
+			'eval'						=> array('mandatory'=>true, 'tl_class'=>'w50 w50h'),
 		),
 		'summarizeSize' => array
 		(
