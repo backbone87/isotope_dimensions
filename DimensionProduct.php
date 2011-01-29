@@ -59,12 +59,18 @@ class DimensionProduct extends IsotopeProduct
 		(
 			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_area'],
 		);
+		
+		// Move height & width to top of attributes
+		if (count($arrOptions))
+		{
+			$arrDimensions = array('dimension_x' => $arrOptions['dimension_x'], 'dimension_y' => $arrOptions['dimension_y']);
+			unset($arrOptions['dimension_x'], $arrOptions['dimension_y']);
+			array_insert($arrOptions, 0, $arrDimensions);
+		}
 
 		parent::__construct($arrData, $arrOptions, $blnLocked);
 		
-		$this->arrVariantAttributes[] = 'dimension_x';
-		$this->arrVariantAttributes[] = 'dimension_y';
-		$this->arrVariantAttributes[] = 'dimension_area';
+		array_insert($this->arrVariantAttributes, 0, array('dimension_x', 'dimension_y', 'dimension_area'));
 	}
 
 
