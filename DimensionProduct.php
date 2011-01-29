@@ -102,6 +102,11 @@ class DimensionProduct extends IsotopeProduct
 				break;
 
 			case 'price':
+				if ($this->blnLocked)
+				{
+					return $this->arrData['price'];
+				}
+				
 				$time = time();
 				$objGroup = $this->Database->execute("SELECT * FROM tl_product_dimensions WHERE id=" . (int)$this->arrData['dimensions']);
 				
