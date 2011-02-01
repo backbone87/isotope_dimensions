@@ -54,12 +54,12 @@ class DimensionProduct extends IsotopeProduct
 				array('tl_iso_products_dimensions', 'validateY'),
 			),
 		);
-		
+
 		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_area'] = array
 		(
 			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_area'],
 		);
-		
+
 		// Move height & width to top of attributes
 		if (count($arrOptions))
 		{
@@ -69,7 +69,7 @@ class DimensionProduct extends IsotopeProduct
 		}
 
 		parent::__construct($arrData, $arrOptions, $blnLocked);
-		
+
 		array_insert($this->arrVariantAttributes, 0, array('dimension_x', 'dimension_y', 'dimension_area'));
 	}
 
@@ -90,14 +90,14 @@ class DimensionProduct extends IsotopeProduct
 				}
 				return (float)$this->arrOptions[$strKey];
 				break;
-			
+
 			case 'dimension_area':
 				if ($this->dimension_x == 0 || $this->dimension_y == 0)
 					return '';
 
 				$this->loadLanguageFile('tl_product_dimensions');
 				$objGroup = $this->Database->execute("SELECT * FROM tl_product_dimensions WHERE id=" . (int)$this->arrData['dimensions']);
-				
+
 				return $this->dimension_x * $this->dimension_y / 10000 . ' ' . $GLOBALS['TL_LANG']['tl_product_dimensions'][$objGroup->multiply_unit];
 				break;
 
@@ -106,12 +106,12 @@ class DimensionProduct extends IsotopeProduct
 				{
 					return $this->arrData['price'];
 				}
-				
+
 				$time = time();
 				$objGroup = $this->Database->execute("SELECT * FROM tl_product_dimensions WHERE id=" . (int)$this->arrData['dimensions']);
-				
+
 				$arrDimension = array('x'=>($this->arrOptions['dimension_x']*$this->quantity_requested), 'y'=>($this->arrOptions['dimension_y']*$this->quantity_requested));
-				
+
 				if ($objGroup->summarizeSize == 'product' || $objGroup->summarizeSize == 'variant' || $objGroup->summarizeSize == 'type')
 				{
 					foreach( $this->Isotope->Cart->getProducts() as $objProduct )
@@ -128,7 +128,7 @@ class DimensionProduct extends IsotopeProduct
 									$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
 								}
 								break;
-		
+
 							case 'variant':
 								if ($objProduct->id == $this->id)
 								{
@@ -136,7 +136,7 @@ class DimensionProduct extends IsotopeProduct
 									$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
 								}
 								break;
-		
+
 							case 'type':
 								if ($objProduct->type == $this->type)
 								{
@@ -147,7 +147,7 @@ class DimensionProduct extends IsotopeProduct
 						}
 					}
 				}
-				
+
 				if ($objGroup->mode == 'area')
 				{
 					$fltArea = $arrDimension['x'] * $arrDimension['y'];
@@ -176,11 +176,11 @@ class DimensionProduct extends IsotopeProduct
 	public function generateAjax(&$objModule)
 	{
 		$arrOptions = parent::generateAjax($objModule);
-		
+
 		$fltPrice = $this->price;
-		
+
 		$arrOptions[] = array('id'=>$this->formSubmit . '_price', 'html'=>('<div class="iso_attribute" id="' . $this->formSubmit . '_price">' . ($fltPrice > 0 ? $this->Isotope->formatPriceWithCurrency($fltPrice) : '') . '</div>'));
-		
+
 		return $arrOptions;
 	}
 }
