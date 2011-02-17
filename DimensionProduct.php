@@ -155,7 +155,7 @@ class DimensionProduct extends IsotopeProduct
 
 					if ($objGroup->multiply_per > 0)
 					{
-						$intFactor = ceil(($this->arrOptions['dimension_x'] * $this->arrOptions['dimension_y']) / $objGroup->multiply_per);
+						$intFactor = ($this->arrOptions['dimension_x'] * $this->arrOptions['dimension_y']) / $objGroup->multiply_per;
 
 						return $this->Isotope->calculatePrice(((float)$objPrice->price * $intFactor), $this, 'price', $this->arrData['tax_class']);
 					}
