@@ -110,19 +110,12 @@ class DimensionProduct extends IsotopeProduct
 				break;
 
 			case 'price':
-				if ($this->blnLocked)
-				{
-					return $this->arrData['price'];
-				}
-
-				
-
-				return $this->Isotope->calculatePrice($this->findDimensionPrice(), $this, 'price', $this->arrData['tax_class']);
+				return $this->blnLocked ? $this->arrData['price'] : $this->Isotope->calculatePrice($this->findDimensionPrice(), $this, 'price', $this->arrData['tax_class']);
 				break;
 			
 			case 'tax_free_price':
 				return $this->blnLocked ? $this->arrData['price'] : $this->Isotope->calculatePrice($this->findDimensionPrice(), $this, 'price');
-
+				break;
 		}
 
 		return parent::__get($strKey);
@@ -189,7 +182,7 @@ class DimensionProduct extends IsotopeProduct
 			{
 				$intFactor = ($this->arrOptions['dimension_x'] * $this->arrOptions['dimension_y']) / $objGroup->multiply_per;
 
-				return $this->Isotope->calculatePrice(((float)$objPrice->price * $intFactor), $this, 'price', $this->arrData['tax_class']);
+				return ((float)$objPrice->price * $intFactor);
 			}
 		}
 		else
