@@ -29,5 +29,5 @@
 /**
  * Product types
  */
-$GLOBALS['TL_LANG']['ISO_PRODUCT']['dimension']		= array('Product with dimension price', 'The price for this product is calculated based on the user\'s choosen dimensions. You should setup dimension prices first!');
+$GLOBALS['ISO_LANG']['PRODUCT']['dimension']		= array('Product with dimension price', 'The price for this product is calculated based on the user\'s choosen dimensions. You should setup dimension prices first!');
 
