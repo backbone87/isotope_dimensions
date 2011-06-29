@@ -21,6 +21,7 @@
  * PHP version 5
  * @copyright  Andreas Schempp 2010
  * @author     Andreas Schempp <andreas@schempp.ch>
+ * @author     Christian de la Haye <service@delahaye.de>
  * @license    http://opensource.org/licenses/lgpl-3.0.html
  * @version    $Id$
  */
@@ -152,14 +153,14 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['start'],
 			'exclude'					=> true,
 			'inputType'					=> 'text',
-			'eval'						=> array('rgxp'=>'date', 'datepicker'=>$this->getDatePickerString(), 'tl_class'=>'w50 wizard'),
+			'eval'						=> array('rgxp'=>'date', 'datepicker'=>(method_exists($this,'getDatePickerString') ? $this->getDatePickerString() : true), 'tl_class'=>'w50 wizard'),
 		),
 		'stop' => array
 		(
 			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['stop'],
 			'exclude'					=> true,
 			'inputType'					=> 'text',
-			'eval'						=> array('rgxp'=>'date', 'datepicker'=>$this->getDatePickerString(), 'tl_class'=>'w50 wizard'),
+			'eval'						=> array('rgxp'=>'date', 'datepicker'=>(method_exists($this,'getDatePickerString') ? $this->getDatePickerString() : true), 'tl_class'=>'w50 wizard'),
 		),
 	)
 );
@@ -234,4 +235,3 @@ class tl_product_dimension_prices extends Backend
 		}
 	}
 }
-
