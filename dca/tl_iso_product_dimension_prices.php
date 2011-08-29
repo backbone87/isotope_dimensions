@@ -28,9 +28,9 @@
 
 
 /**
- * Table tl_product_dimension_prices
+ * Table tl_iso_product_dimension_prices
  */
-$GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
+$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array
 (
 
 	// Config
@@ -38,10 +38,10 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 	(
 		'dataContainer'					=> 'Table',
 		'enableVersioning'				=> true,
-		'ptable'						=> 'tl_product_dimensions',
+		'ptable'						=> 'tl_iso_product_dimensions',
 		'onload_callback' => array
 		(
-			array('tl_product_dimension_prices', 'selectPalette'),
+			array('tl_iso_product_dimension_prices', 'selectPalette'),
 		),
 	),
 
@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 			'panelLayout'				=> 'filter;search,limit',
 			'headerFields'				=> array('name', 'mode', 'unit'),
 			'disableGrouping'			=> true,
-			'child_record_callback'		=> array('tl_product_dimension_prices', 'listPrice')
+			'child_record_callback'		=> array('tl_iso_product_dimension_prices', 'listPrice')
 		),
 		'global_operations' => array
 		(
@@ -72,26 +72,26 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 		(
 			'edit' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['edit'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['edit'],
 				'href'					=> 'act=edit',
 				'icon'					=> 'edit.gif'
 			),
 			'copy' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['copy'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['copy'],
 				'href'					=> 'act=copy',
 				'icon'					=> 'copy.gif'
 			),
 			'delete' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['delete'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['delete'],
 				'href'					=> 'act=delete',
 				'icon'					=> 'delete.gif',
 				'attributes'			=> 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'show' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['show'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['show'],
 				'href'					=> 'act=show',
 				'icon'					=> 'show.gif'
 			),
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 	(
 		'dimension_x' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['dimension_x'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['dimension_x'],
 			'exclude'					=> true,
 			'filter'					=> true,
 			'inputType'					=> 'text',
@@ -118,7 +118,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 		),
 		'dimension_y' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['dimension_y'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['dimension_y'],
 			'exclude'					=> true,
 			'filter'					=> true,
 			'inputType'					=> 'text',
@@ -126,7 +126,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 		),
 		'area' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['area'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['area'],
 			'exclude'					=> true,
 			'filter'					=> true,
 			'inputType'					=> 'text',
@@ -134,7 +134,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 		),
 		'price' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['price'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['price'],
 			'exclude'					=> true,
 			'search'					=> true,
 			'inputType'					=> 'text',
@@ -142,7 +142,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 		),
 		'published' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['published'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['published'],
 			'exclude'					=> true,
 			'filter'					=> true,
 			'inputType'					=> 'checkbox',
@@ -150,14 +150,14 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 		),
 		'start' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['start'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['start'],
 			'exclude'					=> true,
 			'inputType'					=> 'text',
 			'eval'						=> array('rgxp'=>'date', 'datepicker'=>(method_exists($this,'getDatePickerString') ? $this->getDatePickerString() : true), 'tl_class'=>'w50 wizard'),
 		),
 		'stop' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimension_prices']['stop'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['stop'],
 			'exclude'					=> true,
 			'inputType'					=> 'text',
 			'eval'						=> array('rgxp'=>'date', 'datepicker'=>(method_exists($this,'getDatePickerString') ? $this->getDatePickerString() : true), 'tl_class'=>'w50 wizard'),
@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_product_dimension_prices'] = array
 );
 
 
-class tl_product_dimension_prices extends Backend
+class tl_iso_product_dimension_prices extends Backend
 {
 
 	public function listPrice($row)
@@ -183,18 +183,18 @@ class tl_product_dimension_prices extends Backend
 		$strStartStop = '';
 		if (strlen($row['start']) && strlen($row['stop']))
 		{
-			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_product_dimension_prices']['labelStartStop'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['start']), $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['stop'])) . ']</span>';
+			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['labelStartStop'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['start']), $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['stop'])) . ']</span>';
 		}
 		elseif (strlen($row['start']))
 		{
-			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_product_dimension_prices']['labelStart'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['start'])) . ']</span>';
+			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['labelStart'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['start'])) . ']</span>';
 		}
 		elseif (strlen($row['stop']))
 		{
-			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_product_dimension_prices']['labelStop'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['stop'])) . ']</span>';
+			$strStartStop = ' <span style="color:#b3b3b3; padding-left:3px;">[' . sprintf($GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['labelStop'], $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['stop'])) . ']</span>';
 		}
 
-		$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_product_dimensions WHERE id={$row['pid']}");
+		$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_iso_product_dimensions WHERE id={$row['pid']}");
 
 		if ($objConfig->mode == 'area')
 		{
@@ -211,25 +211,25 @@ class tl_product_dimension_prices extends Backend
 	{
 		if ($this->Input->get('act') != 'create')
 		{
-			$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_product_dimensions WHERE id=(SELECT pid FROM tl_product_dimension_prices WHERE id={$dc->id})");
+			$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_iso_product_dimensions WHERE id=(SELECT pid FROM tl_iso_product_dimension_prices WHERE id={$dc->id})");
 
-			$GLOBALS['TL_DCA']['tl_product_dimension_prices']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_product_dimension_prices']['palettes'][$objConfig->mode];
+			$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['palettes'][$objConfig->mode];
 
 			switch( $objConfig->mode )
 			{
 				case 'area':
-					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_x']);
-					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_y']);
+					unset($GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_x']);
+					unset($GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_y']);
 
-					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['area']['label'][0] .= " ({$objConfig->unit})";
+					$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['area']['label'][0] .= " ({$objConfig->unit})";
 					break;
 
 				case 'dimensions':
 				default:
-					unset($GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['area']);
+					unset($GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['area']);
 
-					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_x']['label'][0] .= " ({$objConfig->unit})";
-					$GLOBALS['TL_DCA']['tl_product_dimension_prices']['fields']['dimension_y']['label'][0] .= " ({$objConfig->unit})";
+					$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_x']['label'][0] .= " ({$objConfig->unit})";
+					$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_y']['label'][0] .= " ({$objConfig->unit})";
 					break;
 			}
 		}

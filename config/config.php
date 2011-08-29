@@ -33,7 +33,7 @@ array_insert($GLOBALS['BE_MOD']['isotope'], 1, array
 (
 	'iso_dimensions' => array
 	(
-		'tables'		=> array('tl_product_dimensions', 'tl_product_dimension_prices'),
+		'tables'		=> array('tl_iso_product_dimensions', 'tl_iso_product_dimension_prices'),
 		'icon'			=> 'system/modules/isotope_dimensions/html/icon-dimensions.png',
 	),
 ));
@@ -51,6 +51,8 @@ $GLOBALS['ISO_PRODUCT']['dimension'] = array
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions_min';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions_max';
+$GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions_ratio';
+$GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'dimensions_constrain';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'area_min';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'area_max';
 

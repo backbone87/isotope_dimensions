@@ -8,10 +8,10 @@
 -- **********************************************************
 
 --
--- Table `tl_product_dimensions`
+-- Table `tl_iso_product_dimensions`
 --
 
-CREATE TABLE `tl_product_dimensions` (
+CREATE TABLE `tl_iso_product_dimensions` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `tstamp` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
@@ -27,10 +27,10 @@ CREATE TABLE `tl_product_dimensions` (
 -- --------------------------------------------------------
 
 --
--- Table `tl_product_dimension_prices`
+-- Table `tl_iso_product_dimension_prices`
 --
 
-CREATE TABLE `tl_product_dimension_prices` (
+CREATE TABLE `tl_iso_product_dimension_prices` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
@@ -53,6 +53,8 @@ CREATE TABLE `tl_product_dimension_prices` (
 
 CREATE TABLE `tl_iso_products` (
   `dimensions` int(10) unsigned NOT NULL default '0',
+  `dimensions_constrain` varchar(16) NOT NULL default '',
+  `dimensions_ratio` decimal(21,3) unsigned NOT NULL default '0.000',
   `dimensions_min` blob NULL,
   `dimensions_max` blob NULL,
   `area_min` decimal(21,3) unsigned NOT NULL default '0.000',

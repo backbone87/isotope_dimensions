@@ -37,17 +37,16 @@ var IsotopeDimensionProduct = new Class(
 		{
 			if (el.get('name') == 'dimension_x')
 			{
-				if ($(el.get('id').replace('dimension_x', 'dimension_y')).value != '')
-				{
-					this.form.send();
-				}
+				var objEl = $(el.get('id').replace('dimension_x', 'dimension_y'));
 			}
 			else
 			{
-				if ($(el.get('id').replace('dimension_y', 'dimension_x')).value != '')
-				{
-					this.form.send();
-				}
+				var objEl = $(el.get('id').replace('dimension_y', 'dimension_x'));
+			}
+			
+			if (objEl.hasClass('constrained') || (objEl.value != ''))
+			{
+				this.form.send();
 			}
 		}
 		else

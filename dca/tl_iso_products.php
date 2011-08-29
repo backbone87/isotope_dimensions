@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions'] = array
 (
 	'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions'],
 	'inputType'				=> 'select',
-	'foreignKey'			=> 'tl_product_dimensions.name',
+	'foreignKey'			=> 'tl_iso_product_dimensions.name',
 	'eval'					=> array('mandatory'=>true, 'includeBlankOption'=>true, 'tl_class'=>'clr'),
 	'attributes'			=> array('legend'=>'pricing_legend'),
 );
@@ -70,6 +70,31 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['area_max'] = array
 	'attributes'			=> array('legend'=>'pricing_legend'),
 );
 
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions_ratio'] = array
+(
+	'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_ratio'],
+	'inputType'				=> 'text',
+	'eval'					=> array('mandatory'=>true, 'rgxp'=>'digits', 'tl_class'=>'w50'),
+	'attributes'			=> array('legend'=>'pricing_legend'),
+	'save_callback'			=> array
+	(
+		array('tl_iso_products_dimensions', 'generateRatio')
+	),
+);
+
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions_constrain'] = array
+(
+	'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_constrain'],
+	'inputType'				=> 'select',
+	'options'				=> array('constrain_x', 'constrain_y'),
+	'reference'				=> &$GLOBALS['TL_LANG']['tl_iso_products'],
+	'eval'					=> array('includeBlankOption'=>true, 'tl_class'=>'w50'),
+	'attributes'			=> array('legend'=>'pricing_legend'),
+	'save_callback'			=> array
+	(
+		array('tl_iso_products_dimensions', 'setConstrain')
+	),
+);
 
 class tl_iso_products_dimensions extends Controller
 {
@@ -106,6 +131,59 @@ class tl_iso_products_dimensions extends Controller
 		}
 
 		return $varValue;
+	}
+
+
+	/**
+	 * Auto-generate the ratio and dimension to constrain.
+	 * Instead of a number enter #, #x or #y as ratio. This function will calculate the ratio.
+	 */
+	public function generateRatio($varValue, DataContainer $dc)
+	{
+		if (!preg_match('/#([XYxy]?)/', str_replace('&#35;', '#', $varValue), $matches))
+		{
+			return $varValue;
+		}
+
+		$image = null;
+		$images = deserialize($dc->activeRecord->images);
+		if (is_array($images) && count($images) > 0) {
+			$image = $images[0];
+		}
+		
+		$strFile = $image ? 'isotope/' . strtolower(substr($image['src'], 0, 1)) . '/' . $image['src'] : null;
+		if ($strFile && is_file(TL_ROOT . '/' . $strFile))
+		{
+			$objImage = Image::createFromFile($strFile);
+			
+			switch (strtolower($matches[1]))
+			{
+				case 'y':
+					$varValue = (float)($objImage->height / $objImage->width);
+					break;
+
+				default:
+					$varValue = (float)($objImage->width / $objImage->height);
+					break;
+			}
+		}
+
+		return $varValue;
+	}
+
+
+	/**
+	 * Set the constrain dimension value.
+	 * Instead of a number enter #, #x or #y as ratio. This function will constrain a dimension.
+	 */
+	public function setConstrain($varValue, DataContainer $dc)
+	{
+		if (!preg_match('/#([XYxy])/', str_replace('&#35;', '#', $this->Input->post('dimensions_ratio')), $matches))
+		{
+			return $varValue;
+		}
+
+		return 'constrain_' . strtolower($matches[1]);
 	}
 }
 

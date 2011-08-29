@@ -2,7 +2,7 @@
 
 /**
  * TYPOlight webCMS
- * Copyright (C) 2005-2009 Leo Feyer
+ * Copyright © 2005-2009 Leo Feyer
  *
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,9 +27,9 @@
 
 
 /**
- * Table tl_product_dimensions
+ * Table tl_iso_product_dimensions
  */
-$GLOBALS['TL_DCA']['tl_product_dimensions'] = array
+$GLOBALS['TL_DCA']['tl_iso_product_dimensions'] = array
 (
 
 	// Config
@@ -37,7 +37,7 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 	(
 		'dataContainer'					=> 'Table',
 		'enableVersioning'				=> true,
-		'ctable'						=> array('tl_product_dimension_prices'),
+		'ctable'						=> array('tl_iso_product_dimension_prices'),
 		'switchToEdit'					=> true,
 	),
 
@@ -70,33 +70,33 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 		(
 			'edit' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['edit'],
-				'href'					=> 'table=tl_product_dimension_prices',
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['edit'],
+				'href'					=> 'table=tl_iso_product_dimension_prices',
 				'icon'					=> 'edit.gif',
 			),
 			'copy' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['copy'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['copy'],
 				'href'					=> 'act=copy',
 				'icon'					=> 'copy.gif',
 			),
 			'delete' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['delete'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['delete'],
 				'href'					=> 'act=delete',
 				'icon'					=> 'delete.gif',
 				'attributes'			=> 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"',
 			),
 			'show' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['show'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['show'],
 				'href'					=> 'act=show',
 				'icon'					=> 'show.gif',
 			),/*
 
 			'load' => array
 			(
-				'label'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['load'],
+				'label'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['load'],
 				'href'					=> 'key=load',
 				'icon'					=> 'system/modules/isotope_dimensions/html/load-table.png',
 			),
@@ -115,55 +115,55 @@ $GLOBALS['TL_DCA']['tl_product_dimensions'] = array
 	(
 		'name' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['name'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['name'],
 			'inputType'					=> 'text',
 			'eval'						=> array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'long'),
 		),
 		'mode' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['mode'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['mode'],
 			'filter'					=> true,
 			'inputType'					=> 'radio',
 			'default'					=> 'dimensions',
 			'options'					=> array('dimensions', 'area'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
+			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
 			'eval'						=> array('mandatory'=>true, 'tl_class'=>'clr w50'),
 		),
 		'multiply_per' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['multiply_per'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['multiply_per'],
 			'filter'					=> true,
 			'inputType'					=> 'text',
 			'eval'						=> array('rgxp'=>'digit', 'maxlength'=>21, 'tl_class'=>'w50'),
 		),
 		'multiply_unit' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['multiply_unit'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['multiply_unit'],
 			'filter'					=> true,
 			'inputType'					=> 'radio',
 			'default'					=> 'dimensions',
 			'options'					=> array('qmm', 'qcm', 'qm', 'qkm'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
+			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
 			'eval'						=> array('mandatory'=>true, 'tl_class'=>'w50 w50h'),
 		),
 		'unit' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['unit'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['unit'],
 			'filter'					=> true,
 			'inputType'					=> 'radio',
 			'default'					=> 'dimensions',
 			'options'					=> array('mm', 'cm', 'm', 'km'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
+			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
 			'eval'						=> array('mandatory'=>true, 'tl_class'=>'w50 w50h'),
 		),
 		'summarizeSize' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_product_dimensions']['summarizeSize'],
+			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['summarizeSize'],
 			'filter'					=> true,
 			'inputType'					=> 'radio',
 			'default'					=> 'item',
 			'options'					=> array('item', 'product', 'variant', 'type'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_product_dimensions'],
+			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
 			'eval'						=> array('mandatory'=>true, 'tl_class'=>'clr'),
 		),
 	)

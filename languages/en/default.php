@@ -31,3 +31,11 @@
  */
 $GLOBALS['ISO_LANG']['PRODUCT']['dimension']		= array('Product with dimension price', 'The price for this product is calculated based on the user\'s choosen dimensions. You should setup dimension prices first!');
 
+
+/**
+ * Errors
+ */
+$GLOBALS['ISO_LANG']['ERR']['dimensionMinWidth']	= 'The minimum width is %s';
+$GLOBALS['ISO_LANG']['ERR']['dimensionMaxWidth']	= 'The maximum width is %s';
+$GLOBALS['ISO_LANG']['ERR']['dimensionMinHeight']	= 'The minimum heigth is %s';
+$GLOBALS['ISO_LANG']['ERR']['dimensionMaxHeight']	= 'The maximum heigth is %s';

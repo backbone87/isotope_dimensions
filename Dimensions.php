@@ -35,7 +35,7 @@ class Dimensions extends Frontend
 	{
 		if ($objProduct instanceof DimensionProduct)
 		{
-			$objTemplate->price = '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price"> </div>';
+			$objTemplate->price = '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price">' . sprintf($GLOBALS['TL_LANG']['MSC']['priceRangeLabel'], $objProduct->formatted_min_price) . '</div>';
 		}
 
 		return $objTemplate;
