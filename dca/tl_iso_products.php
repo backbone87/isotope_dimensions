@@ -150,12 +150,12 @@ class tl_iso_products_dimensions extends Controller
 		if (is_array($images) && count($images) > 0) {
 			$image = $images[0];
 		}
-		
+
 		$strFile = $image ? 'isotope/' . strtolower(substr($image['src'], 0, 1)) . '/' . $image['src'] : null;
 		if ($strFile && is_file(TL_ROOT . '/' . $strFile))
 		{
 			$objImage = Image::createFromFile($strFile);
-			
+
 			switch (strtolower($matches[1]))
 			{
 				case 'y':

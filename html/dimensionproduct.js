@@ -43,7 +43,7 @@ var IsotopeDimensionProduct = new Class(
 			{
 				var objEl = $(el.get('id').replace('dimension_y', 'dimension_x'));
 			}
-			
+
 			if (objEl.hasClass('constrained') || (objEl.value != ''))
 			{
 				this.form.send();

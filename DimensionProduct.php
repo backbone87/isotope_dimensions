@@ -130,7 +130,7 @@ class DimensionProduct extends IsotopeProduct
 						$dimension = max(0, max($dimension, $this->dimensions_min[0]));
 					}
 				}
-				
+
 				return $dimension;
 				break;
 
@@ -147,15 +147,15 @@ class DimensionProduct extends IsotopeProduct
 			case 'price':
 				return $this->blnLocked ? $this->arrData['price'] : $this->Isotope->calculatePrice($this->findDimensionPrice(), $this, 'price', $this->arrData['tax_class']);
 				break;
-				
+
 			case 'min_price':
 				return $this->blnLocked ? $this->arrData['price'] : $this->Isotope->calculatePrice($this->findDimensionPrice(true), $this, 'price', $this->arrData['tax_class']);
 				break;
-				
+
 			case 'formatted_min_price':
 				return $this->Isotope->formatPriceWithCurrency($this->min_price);
 				break;
-				
+
 			case 'tax_free_price':
 				return $this->blnLocked ? $this->arrData['price'] : $this->Isotope->calculatePrice($this->findDimensionPrice(), $this, 'price');
 				break;
@@ -180,7 +180,7 @@ class DimensionProduct extends IsotopeProduct
 		}
 
 		$arrOptions = parent::generateAjax($objModule);
-		
+
 		$fltPrice = $this->price;
 
 		$arrOptions[] = array('id'=>$this->formSubmit . '_price', 'html'=>('<div class="iso_attribute" id="' . $this->formSubmit . '_price">' . ($fltPrice > 0 ? $this->Isotope->formatPriceWithCurrency($fltPrice) : '') . '</div>'));
