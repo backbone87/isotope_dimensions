@@ -41,8 +41,6 @@ class DimensionProduct extends IsotopeProduct
 		$this->import('Database');
 		$unit = $GLOBALS['TL_LANG']['tl_iso_products'][$this->Database->query("SELECT `unit` FROM tl_iso_product_dimensions WHERE id=" . (int)$arrData['dimensions'])->unit.'_label'];
 
-		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope_dimensions/html/dimensionproduct.js';
-
 		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_x'] = array
 		(
 			'label'					=> $GLOBALS['TL_LANG']['tl_iso_products']['dimension_x'][0] . ' ('.$unit.')',
@@ -163,7 +161,11 @@ class DimensionProduct extends IsotopeProduct
 
 		return parent::__get($strKey);
 	}
-
+	
+	public function generate($strTemplate, &$objModule) {
+		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope_dimensions/html/dimensionproduct.js';
+		return parent::generate($strTemplate, $objModule);
+	}
 
 	public function generateAjax(&$objModule)
 	{
