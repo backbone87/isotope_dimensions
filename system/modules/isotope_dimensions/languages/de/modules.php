@@ -25,15 +25,6 @@
  * @version    $Id$
  */
 
-
-/**
- * Extension folder
- */
 $GLOBALS['TL_LANG']['MOD']['isotope_dimensions']	= array('Isotope eCommerce: Flächenpreise', '');
 
-
-/**
- * Backend modules
- */
 $GLOBALS['TL_LANG']['MOD']['iso_dimensions']		= array('Flächenpreise', '');
-

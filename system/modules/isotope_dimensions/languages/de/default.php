@@ -25,16 +25,9 @@
  * @version    $Id$
  */
 
+$GLOBALS['ISO_LANG']['PRODUCT']['dimension']
+	= array('Produkt mit größenabhängigem Preis', 'Der Preis für dieses Produkt wird auf Basis der vom Käufer angegebenen Größe berechnet. Es sollten zuerst Flächenpreis-Listen angelegt werden!');
 
-/**
- * Product types
- */
-$GLOBALS['ISO_LANG']['PRODUCT']['dimension']		= array('Product with dimension price', 'The price for this product is calculated based on the user\'s choosen dimensions. You should setup dimension prices first!');
-
-
-/**
- * Errors
- */
 $GLOBALS['ISO_LANG']['ERR']['dimensionMinWidth']	= 'Die minimale Breite beträgt %s';
 $GLOBALS['ISO_LANG']['ERR']['dimensionMaxWidth']	= 'Die maximale Breite beträgt %s';
 $GLOBALS['ISO_LANG']['ERR']['dimensionMinHeight']	= 'Die minimale Höhe beträgt %s';

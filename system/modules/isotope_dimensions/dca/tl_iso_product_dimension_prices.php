@@ -213,23 +213,24 @@ class tl_iso_product_dimension_prices extends Backend
 		{
 			$objConfig = $this->Database->execute("SELECT mode,unit FROM tl_iso_product_dimensions WHERE id=(SELECT pid FROM tl_iso_product_dimension_prices WHERE id={$dc->id})");
 
-			$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['palettes']['default'] = $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['palettes'][$objConfig->mode];
+			$arrDCA = &$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'];
+			$arrDCA['palettes']['default'] = $arrDCA['palettes'][$objConfig->mode];
 
 			switch( $objConfig->mode )
 			{
 				case 'area':
-					unset($GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_x']);
-					unset($GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_y']);
+					unset($arrDCA['fields']['dimension_x']);
+					unset($arrDCA['fields']['dimension_y']);
 
-					$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['area']['label'][0] .= " ({$objConfig->unit})";
+					$arrDCA['fields']['area']['label'][0] .= " ({$objConfig->unit})";
 					break;
 
 				case 'dimensions':
 				default:
-					unset($GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['area']);
+					unset($arrDCA['fields']['area']);
 
-					$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_x']['label'][0] .= " ({$objConfig->unit})";
-					$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices']['fields']['dimension_y']['label'][0] .= " ({$objConfig->unit})";
+					$arrDCA['fields']['dimension_x']['label'][0] .= " ({$objConfig->unit})";
+					$arrDCA['fields']['dimension_y']['label'][0] .= " ({$objConfig->unit})";
 					break;
 			}
 		}

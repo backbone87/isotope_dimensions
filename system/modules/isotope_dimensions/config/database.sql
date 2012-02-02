@@ -16,9 +16,9 @@ CREATE TABLE `tl_iso_product_dimensions` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
   `mode` varchar(16) NOT NULL default '',
-  `unit` varchar(4) NOT NULL default '',
+  `unit` varchar(255) NOT NULL default '',
   `multiply_per` decimal(21,3) unsigned NOT NULL default '0.000',
-  `multiply_unit` varchar(4) NOT NULL default '',
+  `multiply_unit` varchar(255) NOT NULL default '',
   `summarizeSize` varchar(8) NOT NULL default '',
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

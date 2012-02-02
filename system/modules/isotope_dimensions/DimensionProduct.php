@@ -34,48 +34,21 @@ class DimensionProduct extends IsotopeProduct
 	 */
 	protected $ajaxClass = 'IsotopeDimensionProduct';
 
+	protected $objDimension
 
-	public function __construct($arrData, $arrOptions=null, $blnLocked=false)
-	{
+	public function __construct($arrData, $arrOptions=null, $blnLocked=false) {
 		// Get the unit to stick it to the label
 		$this->import('Database');
-		$unit = $GLOBALS['TL_LANG']['tl_iso_products'][$this->Database->query("SELECT `unit` FROM tl_iso_product_dimensions WHERE id=" . (int)$arrData['dimensions'])->unit.'_label'];
-
-		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_x'] = array
-		(
-			'label'					=> $GLOBALS['TL_LANG']['tl_iso_products']['dimension_x'][0] . ' ('.$unit.')',
-			'inputType'				=> 'text',
-			'eval'					=> array('mandatory'=>true, 'class'=>(($arrData['dimensions_constrain'] == 'constrain_x') && ($arrData['dimensions_ratio'] > 0) ? 'constrained' : '')),
-			'attributes'			=> array('variant_option'=>true),
-			'save_callback'			=> array
-			(
-				array('tl_iso_products_dimensions', 'validateX'),
-			),
-		);
-
-		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_y'] = array
-		(
-			'label'					=> $GLOBALS['TL_LANG']['tl_iso_products']['dimension_y'][0] . ' ('.$unit.')',
-			'inputType'				=> 'text',
-			'eval'					=> array('mandatory'=>true, 'class'=>(($arrData['dimensions_constrain'] == 'constrain_y') && ($arrData['dimensions_ratio'] > 0) ? 'constrained' : '')),
-			'attributes'			=> array('variant_option'=>true),
-			'save_callback'			=> array
-			(
-				array('tl_iso_products_dimensions', 'validateY'),
-			),
-		);
-
-		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_area'] = array
-		(
-			'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimension_area'],
+		
+		$this->objDimension = $this->Database->query('
+			SELECT	*
+			FROM	tl_iso_product_dimensions
+			WHERE	id = ' . intval($arrData['dimensions'])
 		);
 
 		// Move height & width to top of attributes
-		if (count($arrOptions))
-		{
-			$arrDimensions = array('dimension_x' => $arrOptions['dimension_x'], 'dimension_y' => $arrOptions['dimension_y']);
-			unset($arrOptions['dimension_x'], $arrOptions['dimension_y']);
-			array_insert($arrOptions, 0, $arrDimensions);
+		if($arrOptions) {
+			$arrOptions = array_merge(array('dimension_x' => null, 'dimension_y' => null), $arrOptions);
 		}
 
 		parent::__construct($arrData, $arrOptions, $blnLocked);
@@ -125,7 +98,7 @@ class DimensionProduct extends IsotopeProduct
 					}
 					else
 					{
-						$dimension = max(0, max($dimension, $this->dimensions_min[0]));
+						$dimension = max(0, max($dimension, $dimensions_min));
 					}
 				}
 
@@ -162,12 +135,12 @@ class DimensionProduct extends IsotopeProduct
 		return parent::__get($strKey);
 	}
 	
-	public function generate($strTemplate, &$objModule) {
+	public function generate($strTemplate, $objModule) {
 		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope_dimensions/html/dimensionproduct.js';
 		return parent::generate($strTemplate, $objModule);
 	}
 
-	public function generateAjax(&$objModule)
+	public function generateAjax($objModule)
 	{
 		if (($this->dimensions_ratio > 0) && $this->dimensions_constrain)
 		{
@@ -185,11 +158,22 @@ class DimensionProduct extends IsotopeProduct
 
 		$fltPrice = $this->price;
 
-		$arrOptions[] = array('id'=>$this->formSubmit . '_price', 'html'=>('<div class="iso_attribute" id="' . $this->formSubmit . '_price">' . ($fltPrice > 0 ? $this->Isotope->formatPriceWithCurrency($fltPrice) : '') . '</div>'));
+		$arrOptions[] = array(
+			'id'	=> $this->formSubmit . '_price',
+			'html'	=> '<div class="iso_attribute" id="' . $this->formSubmit . '_price">'
+				. ($fltPrice > 0 ? $this->Isotope->formatPriceWithCurrency($fltPrice) : '')
+				. '</div>'
+		);
 
 		return $arrOptions;
 	}
 
+	protected function setDimensionLabels() {
+		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_x']['label']
+			= sprintf($GLOBALS['TL_LANG']['tl_iso_products']['dimension_x'][2], $this->objDimension->unit);
+		$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_y']['label']
+			= sprintf($GLOBALS['TL_LANG']['tl_iso_products']['dimension_y'][2], $this->objDimension->unit);
+	}
 
 	private function findDimensionPrice($minPrice = false)
 	{
@@ -247,45 +231,17 @@ class DimensionProduct extends IsotopeProduct
 		}
 		else
 		{
-			$arrDimension = array('x'=>($this->arrOptions['dimension_x']*$this->quantity_requested), 'y'=>($this->arrOptions['dimension_y']*$this->quantity_requested));
-//echo 'arrDimension: ' . print_r($this->arrData, true);
-			if ($objGroup->summarizeSize == 'product' || $objGroup->summarizeSize == 'variant' || $objGroup->summarizeSize == 'type')
-			{
-				foreach( $this->Isotope->Cart->getProducts() as $objProduct )
-				{
-					if (!($objProduct instanceof DimensionProduct) || $objProduct->cart_id == $this->cart_id)
-						continue;
-
-					switch( $objGroup->summarizeSize )
-					{
-						case 'product':
-							if ($objProduct->id == $this->id || ($objProduct->pid > 0 && $objProduct->pid == $this->pid))
-							{
-								$arrDimension['x'] += ($objProduct->dimension_x * $objProduct->quantity_requested);
-								$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
-							}
-							break;
-
-						case 'variant':
-							if ($objProduct->id == $this->id)
-							{
-								$arrDimension['x'] += ($objProduct->dimension_x * $objProduct->quantity_requested);
-								$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
-							}
-							break;
-
-						case 'type':
-							if ($objProduct->type == $this->type)
-							{
-								$arrDimension['x'] += ($objProduct->dimension_x * $objProduct->quantity_requested);
-								$arrDimension['y'] += ($objProduct->dimension_y * $objProduct->quantity_requested);
-							}
-							break;
-					}
-				}
-			}
-//echo "SELECT * FROM tl_iso_product_dimension_prices WHERE pid={$this->arrData['dimensions']} AND dimension_x >= {$arrDimension['x']} AND dimension_y >= {$arrDimension['y']} AND published='1' AND (start='' OR start>{$time}) AND (stop='' OR stop<{$time}) ORDER BY dimension_x, dimension_y";
-			$objPrice = $this->Database->prepare("SELECT * FROM tl_iso_product_dimension_prices WHERE pid=? AND dimension_x >= ? AND dimension_y >= ? AND published='1' AND (start='' OR start>$time) AND (stop='' OR stop<$time) ORDER BY dimension_x, dimension_y")->limit(1)->execute($this->arrData['dimensions'], $arrDimension['x'], $arrDimension['y']);
+			$objPrice = $this->Database->prepare('
+				SELECT	*
+				FROM	tl_iso_product_dimension_prices
+				WHERE	pid = ?
+				AND		dimension_x >= ?
+				AND		dimension_y >= ?
+				AND		published = \'1\'
+				AND		(start = \'\' OR start > ' . $time . ')
+				AND		(stop = \'\' OR stop < ' . $time . ')
+				ORDER BY dimension_x, dimension_y
+			')->limit(1)->execute($this->arrData['dimensions'], $this->arrOptions['dimension_x'], $this->arrOptions['dimension_y']);
 		}
 
 		return $objPrice->price;

@@ -107,7 +107,12 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimensions'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'						=> '{name_legend},name;{config_legend},mode,multiply_per,unit,multiply_unit;{price_legend},summarizeSize',
+		'__selector__'	=> array('mode'),
+		'default'		=> '{name_legend},name;'
+			. '{config_legend},mode,unit;',
+		'area'			=> '{name_legend},name;'
+			. '{config_legend},mode,unit,multiply_per,multiply_unit;'
+			. '{price_legend},summarizeSize',
 	),
 
 	// Fields
@@ -115,56 +120,53 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimensions'] = array
 	(
 		'name' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['name'],
-			'inputType'					=> 'text',
-			'eval'						=> array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'long'),
+			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['name'],
+			'inputType'	=> 'text',
+			'eval'		=> array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'long'),
 		),
 		'mode' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['mode'],
-			'filter'					=> true,
-			'inputType'					=> 'radio',
-			'default'					=> 'dimensions',
-			'options'					=> array('dimensions', 'area'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
-			'eval'						=> array('mandatory'=>true, 'tl_class'=>'clr w50'),
-		),
-		'multiply_per' => array
-		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['multiply_per'],
-			'filter'					=> true,
-			'inputType'					=> 'text',
-			'eval'						=> array('rgxp'=>'digit', 'maxlength'=>21, 'tl_class'=>'w50'),
-		),
-		'multiply_unit' => array
-		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['multiply_unit'],
-			'filter'					=> true,
-			'inputType'					=> 'radio',
-			'default'					=> 'dimensions',
-			'options'					=> array('qmm', 'qcm', 'qm', 'qkm'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
-			'eval'						=> array('mandatory'=>true, 'tl_class'=>'w50 w50h'),
+			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['mode'],
+			'filter'	=> true,
+			'inputType'	=> 'radio',
+			'default'	=> 'dimensions',
+			'options'	=> array('dimensions', 'area'),
+			'reference'	=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
+			'eval'		=> array('mandatory'=>true, 'submitOnChange'=>true, 'tl_class'=>'clr w50'),
 		),
 		'unit' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['unit'],
-			'filter'					=> true,
-			'inputType'					=> 'radio',
-			'default'					=> 'dimensions',
-			'options'					=> array('mm', 'cm', 'm', 'km'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
-			'eval'						=> array('mandatory'=>true, 'tl_class'=>'w50 w50h'),
+			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['unit'],
+			'filter'	=> true,
+			'inputType'	=> 'text',
+			'default'	=> 'cm',
+			'eval'		=> array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
+		),
+		'multiply_per' => array
+		(
+			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['multiply_per'],
+			'filter'	=> true,
+			'inputType'	=> 'text',
+			'default'	=> 10000,
+			'eval'		=> array('mandatory'=>true, 'rgxp'=>'digit', 'maxlength'=>21, 'tl_class'=>'clr w50'),
+		),
+		'multiply_unit' => array
+		(
+			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['multiply_unit'],
+			'filter'	=> true,
+			'inputType'	=> 'text',
+			'default'	=> 'm²',
+			'eval'		=> array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
 		),
 		'summarizeSize' => array
 		(
-			'label'						=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['summarizeSize'],
-			'filter'					=> true,
-			'inputType'					=> 'radio',
-			'default'					=> 'item',
-			'options'					=> array('item', 'product', 'variant', 'type'),
-			'reference'					=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
-			'eval'						=> array('mandatory'=>true, 'tl_class'=>'clr'),
+			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions']['summarizeSize'],
+			'filter'	=> true,
+			'inputType'	=> 'radio',
+			'default'	=> 'item',
+			'options'	=> array('item', 'product', 'variant', 'type'),
+			'reference'	=> &$GLOBALS['TL_LANG']['tl_iso_product_dimensions'],
+			'eval'		=> array('mandatory'=>true, 'tl_class'=>'clr'),
 		),
 	)
 );

@@ -26,9 +26,29 @@
  */
 
 
-/**
- * Fields
- */
+
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_x'] = array
+(
+	'label'					=> $GLOBALS['TL_LANG']['tl_iso_products']['dimension_x'][0] . ' (' . $this->objDimension->unit . ')',
+	'inputType'				=> 'text',
+	'eval'					=> array('mandatory'=>true, 'class'=>(($arrData['dimensions_constrain'] == 'constrain_x') && ($arrData['dimensions_ratio'] > 0) ? 'constrained' : '')),
+	'attributes'			=> array('variant_option'=>true),
+	'save_callback'			=> array(
+		array('DimensionProductDCA', 'validateX'),
+	),
+);
+
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimension_y'] = array
+(
+	'label'					=> $GLOBALS['TL_LANG']['tl_iso_products']['dimension_y'][0],
+	'inputType'				=> 'text',
+	'eval'					=> array('mandatory'=>true, 'class'=>(($arrData['dimensions_constrain'] == 'constrain_y') && ($arrData['dimensions_ratio'] > 0) ? 'constrained' : '')),
+	'attributes'			=> array('variant_option'=>true),
+	'save_callback'			=> array(
+		array('DimensionProductDCA', 'validateY'),
+	),
+);
+		
 $GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions'] = array
 (
 	'label'					=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions'],
@@ -68,6 +88,40 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['area_max'] = array
 	'inputType'				=> 'text',
 	'eval'					=> array('mandatory'=>true, 'rgxp'=>'digits', 'tl_class'=>'w50'),
 	'attributes'			=> array('legend'=>'pricing_legend'),
+);
+
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions_rules'] = array(
+	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_rules'],
+	'exclude' 		=> true,
+	'inputType' 	=> 'multiColumnWizard',
+	'eval' 			=> array(
+		'columnFields' => array(
+			'dimensions_x_min' => array(
+				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_x_min'],
+				'exclude'	=> true,
+				'inputType'	=> 'text',
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 21, 'style' => 'width:100px')
+			),
+			'dimensions_x_max' => array(
+				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_x_max'],
+				'exclude'	=> true,
+				'inputType'	=> 'text',
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 21, 'style' => 'width:100px')
+			),
+			'dimensions_y_min' => array(
+				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_y_min'],
+				'exclude'	=> true,
+				'inputType'	=> 'text',
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 21, 'style' => 'width:100px')
+			),
+			'dimensions_y_max' => array(
+				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_y_max'],
+				'exclude'	=> true,
+				'inputType'	=> 'text',
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 21, 'style' => 'width:100px')
+			),
+		)
+	)
 );
 
 $GLOBALS['TL_DCA']['tl_iso_products']['fields']['dimensions_ratio'] = array
