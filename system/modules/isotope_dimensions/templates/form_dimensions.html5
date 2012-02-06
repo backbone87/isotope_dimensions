@@ -1,0 +1,17 @@
+<?php if ($this->tableless): ?>
+<div class="form_dimensions" id="ctrl_<?php echo $this->strId; ?>">
+<h4><?php echo $this->strLabel; ?></h4>
+<?php foreach(array('x', 'y') as $strOrdinate): ?>
+<label for="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"<?php if($this->strClass) echo ' class="', $this->strClass, '"'; ?>
+><?php if($this->required): ?><span class="invisible"><?php echo $GLOBALS['TL_LANG']['MSC']['mandatory']; ?></span> <?php endif; ?>
+<?php echo sprintf($this->ordinateLabels[$strOrdinate], $this->unit[$strOrdinate]); ?>
+<?php if($this->required): ?><span class="mandatory">*</span><?php endif; ?></label>
+<input type="text" name="<?php echo $this->strName; ?>[<?php echo $strOrdinate; ?>]" id="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"
+class="text dimensions_<?php echo $strOrdinate; if($this->strClass) echo ' ', $this->strClass; ?>" value="<?php echo specialchars($this->varValue[$strOrdinate]); ?>"
+<?php echo $this->getAttributes(); ?> />
+<?php endforeach; ?>
+<?php echo $this->addSubmit(); ?>
+<?php echo $this->getErrorAsHTML(); ?>
+</div>
+<?php else: ?>
+<?php endif; ?>

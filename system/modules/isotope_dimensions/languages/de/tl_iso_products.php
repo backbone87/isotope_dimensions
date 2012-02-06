@@ -1,35 +1,27 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
-/**
- * TYPOlight webCMS
- * Copyright (C) 2005-2009 Leo Feyer
- *
- * This program is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program. If not, please visit the Free
- * Software Foundation website at http://www.gnu.org/licenses/.
- *
- * PHP version 5
- * @copyright  Andreas Schempp 2010
- * @author     Andreas Schempp <andreas@schempp.ch>
- * @license    http://opensource.org/licenses/lgpl-3.0.html
- * @version    $Id$
- */
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_inputUnit']
+	= array('Eingabe-Einheit', 'Die Einheit in welcher die Eingaben vorgenommen werden.');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_list']
+	= array('Flächenpreise', 'Wählen Sie die Preisliste für diesen Artikel.');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_inputConversion']
+	= array('Eingabe-Umrechnung', 'Die Faktoren mit deren Hilfe die Eingabewerte von der Eingabeeinheit in die Einheit der Flächenpreis-Liste umgerechnet werden.');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area']
+	= array('Flächen-Regel (in erster Eingabe-Einheit)', 'Die minimale und maximale Fläche, wenn benötigt.');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_rules']
+	= array('Abmaßungs-Regeln (in Eingabe-Einheit)', 'Wenn angegeben, muss mindestens eine Regel auf die Eingabe zutreffen, damit die Eingabe als gültig anerkannt wird. Die eingesetzte Flächenpreis-Liste gibt einen impliziten Maximalwert für Breite und Höhe vor auf diese die angegeben Regeln automatisch eingeschränkt werden. Die impliziten Minimalwerte sind 0. Freigelassene Felder erhalten automatisch die impliziterten Werte.');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_x_min']
+	= array('Min. Breite', '');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_x_max']
+	= array('Max. Breite', '');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_y_min']
+	= array('Min. Höhe', '');
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_y_max']
+	= array('Max. Höhe', '');
 
-$GLOBALS['TL_LANG']['tl_iso_products']['dimensions']		= array('Flächenpreise', 'Wählen Sie die Preisliste für diesen Artikel.');
-$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_min']	= array('Minimale Breite und Höhe', 'Die minimale Grösse welche bestellt werden muss.');
-$GLOBALS['TL_LANG']['tl_iso_products']['dimensions_max']	= array('Maximale Breite und Höhe', 'Die maximale Grösse welche bestellt werden kann.');
-$GLOBALS['TL_LANG']['tl_iso_products']['area_min']			= array('Minimale Fläche', 'Die minimale Fläche welche bestellt werden muss.');
-$GLOBALS['TL_LANG']['tl_iso_products']['area_max']			= array('Maximale Fläche', 'Die maximale Fläche welche bestellt werden kann.');
-$GLOBALS['TL_LANG']['tl_iso_products']['dimension_x']		= array('Breite');
-$GLOBALS['TL_LANG']['tl_iso_products']['dimension_y']		= array('Höhe');
 
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_input']	= array(
+	'Maße',
+	'x' => 'Breite (in %s)',
+	'y' => 'Höhe (in %s)'
+);

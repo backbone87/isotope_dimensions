@@ -1,33 +1,27 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
-/**
- * TYPOlight webCMS
- * Copyright (C) 2005-2009 Leo Feyer
- *
- * This program is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program. If not, please visit the Free
- * Software Foundation website at http://www.gnu.org/licenses/.
- *
- * PHP version 5
- * @copyright  Andreas Schempp 2010
- * @author     Andreas Schempp <andreas@schempp.ch>
- * @license    http://opensource.org/licenses/lgpl-3.0.html
- * @version    $Id$
- */
+$GLOBALS['TL_DCA']['tl_iso_producttypes']['palettes']['bbit_iso_dimension']
+	= '{name_legend},name,class,fallback;'
+	. '{dimension_legend},bbit_iso_dimension_input,bbit_iso_dimension_listType;'
+	. '{description_legend:hide},description;'
+	. '{template_legend},list_template,reader_template;'
+	. '{attributes_legend},attributes,variants;'
+	. '{download_legend:hide},downloads';
 
-
-/**
- * Palettes
- */
-$GLOBALS['TL_DCA']['tl_iso_producttypes']['palettes']['dimension']	= '{name_legend},name,class,fallback;{description_legend:hide},description;{template_legend},list_template,reader_template;{attributes_legend},attributes,variants;{download_legend:hide},downloads';
-
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_inputType'] = array(
+	'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_inputType'],
+	'inputType'	=> 'select',
+	'default'	=> 'dimension_2d',
+	'options'	=> array('dimension_2d'/*, 'dimension_3d',*/),
+	'reference'	=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_inputTypeOptions'],
+	'eval'		=> array('mandatory' => true, 'tl_class' => 'w50')
+);
+	
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_listType'] = array(
+	'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_listType'],
+	'inputType'	=> 'select',
+	'default'	=> 'dimension',
+	'options'	=> array('dimension'/*, 'content'*/),
+	'reference'	=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_listTypeOptions'],
+	'eval'		=> array('mandatory' => true, 'tl_class' => 'w50')
+);

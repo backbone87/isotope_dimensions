@@ -1,35 +1,13 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+<?php
 
-/**
- * TYPOlight webCMS
- * Copyright (C) 2005-2009 Leo Feyer
- *
- * This program is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program. If not, please visit the Free
- * Software Foundation website at http://www.gnu.org/licenses/.
- *
- * PHP version 5
- * @copyright  Andreas Schempp 2010
- * @author     Andreas Schempp <andreas@schempp.ch>
- * @license    http://opensource.org/licenses/lgpl-3.0.html
- * @version    $Id$
- */
+$GLOBALS['ISO_LANG']['PRODUCT']['bbit_iso_dimension']
+	= array('Produkt mit variabler Größe', 'Der Preis für dieses Produkt wird auf Basis der vom Käufer angegebenen Größe berechnet. Es sollten zuerst Flächenpreis-Listen angelegt werden!');
 
-$GLOBALS['ISO_LANG']['PRODUCT']['dimension']
-	= array('Produkt mit größenabhängigem Preis', 'Der Preis für dieses Produkt wird auf Basis der vom Käufer angegebenen Größe berechnet. Es sollten zuerst Flächenpreis-Listen angelegt werden!');
-
-$GLOBALS['ISO_LANG']['ERR']['dimensionMinWidth']	= 'Die minimale Breite beträgt %s';
-$GLOBALS['ISO_LANG']['ERR']['dimensionMaxWidth']	= 'Die maximale Breite beträgt %s';
-$GLOBALS['ISO_LANG']['ERR']['dimensionMinHeight']	= 'Die minimale Höhe beträgt %s';
-$GLOBALS['ISO_LANG']['ERR']['dimensionMaxHeight']	= 'Die maximale Höhe beträgt %s';
+$GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_positive']		= 'Bitte nur positive Zahlen eingeben.';
+$GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_noPrices']		= 'Es sind keine Preise für dieses Produkt verfügbar.';
+$GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_noSizePrices']	= 'Es sind keine Preise für diese Größe verfügbar.';
+$GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_xAdjustMinMax']	= 'Bei einer Höhe von %s muss die Breite zwischen %s und %s liegen.';
+$GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_xAdjustMax']	= 'Bei einer Höhe von %s beträgt die maximale Breite %s.';
+$GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_yAdjustMinMax']	= 'Bei einer Breite von %s muss die Höhe zwischen %s und %s liegen.';
+$GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_yAdjustMax']	= 'Bei einer Breite von %s beträgt die maximale Höhe %s.';
 
