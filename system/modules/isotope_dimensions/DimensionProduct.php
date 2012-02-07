@@ -195,11 +195,11 @@ class DimensionProduct extends IsotopeProduct {
 	}
 	
 	public function validateDimension($fltX, $fltY) {
-		if($fltX < 0 || $fltY < 0) {
+		if($fltX <= 0 || $fltY <= 0) {
 			throw new Exception($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_positive']);
 		}
 		
-		$time = time();
+		$intTime = time();
 		
 		$arrDimensionData = $this->getDimensionData();
 		
@@ -210,8 +210,8 @@ class DimensionProduct extends IsotopeProduct {
 			WHERE	p.pid IN (' . implode(',', array_unique($arrDimensionData['list'])) . ')
 			AND		(SELECT mode FROM tl_iso_product_dimensions AS d WHERE d.id = p.pid) = ?
 			AND		p.published = \'1\'
-			AND		(p.start = \'\' OR p.start > ' . $time . ')
-			AND		(p.stop = \'\' OR p.stop < ' . $time . ')
+			AND		(p.start = \'\' OR p.start > ' . $intTime . ')
+			AND		(p.stop = \'\' OR p.stop < ' . $intTime . ')
 			GROUP BY p.pid
 		')->execute($arrParams);
 	
@@ -358,6 +358,60 @@ class DimensionProduct extends IsotopeProduct {
 		} else {
 			unset($GLOBALS['ISO_ATTR']['bbit_iso_dimension']);
 		}
+	}
+	
+	protected function getCalculatedRules() {
+		$blnRulesVariant = array_intersect(
+			array('bbit_iso_dimension_list', 'bbit_iso_dimension_rules'),
+			$this->arrVariantAttributes
+		);
+		$arrRulesState = $blnRulesVariant
+			? $this->arrVariantOptions['variants'][$this->id]['bbit_iso_dimension_rulesState']
+			: $this->arrData['bbit_iso_dimension_rulesState'];
+		
+		$arrListState = $this->getListState();
+		
+		if($arrRulesState['product_tstamp'] == $this->tstamp
+		&& $arrRulesState['product'] == $this->id
+		&& $arrRulesState['list'] == $this->dimension_list
+		&& $arrListState[$arrRulesState['list']] == $arrRulesState['list_tstamp']) {
+			return $blnRulesVariant
+				? $this->arrVariantOptions['variants'][$this->id]['bbit_iso_dimension_calcRules']
+				: $this->arrData['bbit_iso_dimension_calcRules'];
+		}
+	}
+	
+	protected function calculateRules() {
+		
+	}
+	
+	private $arrListState;
+	
+	protected function getListState() {
+		if(isset($this->arrListState)) {
+			return $this->arrListState;
+		}
+		
+		$arrDimensionData = $this->getDimensionData();
+		$intTime = time();
+		$objState = $this->Database->prepare(
+			'SELECT	p.pid, MAX(p.tstamp) AS tstamp
+			FROM	tl_iso_product_dimension_prices AS p
+			WHERE	p.pid IN (' . implode(',', array_unique($arrDimensionData['list'])) . ')
+			AND		(SELECT mode FROM tl_iso_product_dimensions AS d WHERE d.id = p.pid) = ?
+			AND		p.published = \'1\'
+			AND		(p.start = \'\' OR p.start > ' . $intTime . ')
+			AND		(p.stop = \'\' OR p.stop < ' . $intTime . ')
+			GROUP BY p.pid'
+		)->exeucte($this->arrType['bbit_iso_dimension_inputType']);
+		
+		$this->arrListState = array();
+		
+		while($objState->next()) {
+			$this->arrListState[$objState->pid] = $objState->tstamp;
+		}
+		
+		return $this->arrListState;
 	}
 	
 }

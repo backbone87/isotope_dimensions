@@ -53,24 +53,6 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_inputConvers
 		'fixed'				=> true
 	),
 );
-		
-$GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_area'] = array(
-	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area'],
-	'inputType'		=> 'text',
-	'eval'			=> array(
-		'maxlength'			=> 64,
-		'multiple'			=> true,
-		'size'				=> 2,
-		'rgxp'				=> 'digit',
-		'tl_class'			=> 'clr long'
-	),
-	'attributes'	=> array(
-		'legend'			=> 'pricing_legend',
-	),
-	'save_callback'	=> array(
-		array('DimensionProductCallbacks', 'saveArea')
-	),
-);
 
 $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_rules'] = array(
 	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_rules'],
@@ -98,6 +80,18 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_rules'] = ar
 			),
 			'y_max'	=> array(
 				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_y_max'],
+				'exclude'	=> true,
+				'inputType'	=> 'text',
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+			),
+			'area_min' => array(
+				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_min'],
+				'exclude'	=> true,
+				'inputType'	=> 'text',
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+			),
+			'area_max' => array(
+				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_max'],
 				'exclude'	=> true,
 				'inputType'	=> 'text',
 				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
