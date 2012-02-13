@@ -4,21 +4,21 @@ class Dimension2DProduct extends IsotopeProduct {
 
 	public function __construct($arrData, $arrOptions=null, $blnLocked=false) {
 		if($arrOptions) {
-			$arrOptions = array_merge(array('bbit_iso_dimension_input' => null), $arrOptions);
+			$arrOptions = array_merge(array('bbit_iso_dimension_2d_input' => null), $arrOptions);
 		}
 		parent::__construct($arrData, $arrOptions, $blnLocked);
-//		$this->arrAttributes = array_merge(array('bbit_iso_dimension_input'), (array) $this->arrAttributes);
-		$this->arrVariantAttributes = array_merge(array('bbit_iso_dimension_input'), (array) $this->arrVariantAttributes);
+//		$this->arrAttributes = array_merge(array('bbit_iso_dimension_2d_input'), (array) $this->arrAttributes);
+		$this->arrVariantAttributes = array_merge(array('bbit_iso_dimension_2d_input'), (array) $this->arrVariantAttributes);
 	}
 
 	public function __get($strKey) {
 		switch($strKey) {
 			case 'dimension_x':
-				return floatval($this->arrOptions['bbit_iso_dimension_input']['x']);
+				return floatval($this->arrOptions['bbit_iso_dimension_2d_input']['x']);
 				break;
 				
 			case 'dimension_y':
-				return floatval($this->arrOptions['bbit_iso_dimension_input']['y']);
+				return floatval($this->arrOptions['bbit_iso_dimension_2d_input']['y']);
 				break;
 				
 			case 'dimension_input':
@@ -35,8 +35,8 @@ class Dimension2DProduct extends IsotopeProduct {
 				
 			case 'dimension_labels':
 				$arrLabels = deserialize($this->arrType['bbit_iso_dimension_labels'], true);
-				$arrLabels[0] || $arrLabels[0] = 'x';
-				$arrLabels[1] || $arrLabels[1] = 'y';
+				strlen($arrLabels[0]) || $arrLabels[0] = 'x';
+				strlen($arrLabels[1]) || $arrLabels[1] = 'y';
 				return $arrLabels;
 				break;
 				
@@ -54,24 +54,11 @@ class Dimension2DProduct extends IsotopeProduct {
 			case 'dimension_rules':
 				return deserialize($this->arrData['bbit_iso_dimension_rules'], true);
 				break;
-
+				
 			case 'price':
-				if($this->blnLocked) {
-					return $this->arrData['price'];
-				}
-				$this->arrData['price'] || $this->arrData['price'] = $this->findDimensionPrice();
-				$this->arrData['original_price'] || $this->arrData['original_price'] = $this->arrData['price'];
-				
-				return $this->Isotope->calculatePrice($this->arrData['price'], $this, 'price', $this->arrData['tax_class']);
-				break;
-				
-				
 			case 'tax_free_price':
-				if(!$this->blnLocked) {
-					$this->arrData['price'] || $this->arrData['price'] = $this->findDimensionPrice();
-					$this->arrData['original_price'] || $this->arrData['original_price'] = $this->arrData['price'];
-				}
-				// dont break;
+				$this->blnLocked || $this->arrData['price'] || $this->findDimensionPrice();
+				break;
 		}
 
 		return parent::__get($strKey);
@@ -114,10 +101,9 @@ class Dimension2DProduct extends IsotopeProduct {
 	private function findDimensionPrice() {
 		$arrDimensionData = $this->getDimensionData();
 		if(!$arrDimensionData['maxPrice']) {
-			return 0;
-		}
-		
-		if($this->dimension_input) {
+			$fltPrice = 0;
+			
+		} elseif($this->dimension_input) {
 			if(!isset($this->arrDimensionPrices)) {
 				try {
 					$this->validateDimension($this->dimension_x, $this->dimension_y);
@@ -148,7 +134,9 @@ class Dimension2DProduct extends IsotopeProduct {
 							if($arrDimensionData['pricePerUnit'][$intID]) {
 								// very special case, the lowest possible price is arbitrarily close to 0
 								// because this rule does not force a min area
-								return 0;
+								unset($arrConditions, $arrPerUnitConditions);
+								$fltPrice = 0;
+								break 2;
 							}
 							$arrRules = array($strList);
 							break;
@@ -205,7 +193,9 @@ class Dimension2DProduct extends IsotopeProduct {
 					if(is_infinite($fltMinArea)) {
 						// very special case, the lowest possible price is arbitrarily close to 0,
 						// because there are no rules to force a min area
-						return 0;
+						unset($arrConditions, $arrPerUnitConditions);
+						$fltPrice = 0;
+						break;
 					}
 					$arrMinAreas[$arrDimensionData['list'][$intID]] = $fltMinArea;
 					$arrPerUnitConditions[$intID] = $arrRules ? $arrRules : array($strList);
@@ -219,14 +209,12 @@ class Dimension2DProduct extends IsotopeProduct {
 			$intTime = time();
 			
 			if($arrConditions) {
-				$strConditions = '(' . implode(
-					') OR (',
-					array_unique(call_user_func_array('array_merge', $arrConditions))
-				) . ')';
+				$arrConditions = call_user_func_array('array_merge', $arrConditions);
+				$strConditions = '(' . implode(') OR (', array_unique($arrConditions)) . ')';
 				
 				$objPrice = $this->Database->prepare(
 					'SELECT	p.price
-					FROM	tl_iso_product_dimension_prices AS p
+					FROM	tl_bbit_iso_dimension_price AS p
 					WHERE	(' . $strConditions . ')
 					AND		p.published = \'1\'
 					AND		(p.start = \'\' OR p.start > ' . $intTime . ')
@@ -238,14 +226,12 @@ class Dimension2DProduct extends IsotopeProduct {
 			}
 			
 			if($arrPerUnitConditions) {
-				$strPerUnitConditions = '(' . implode(
-					') OR (',
-					array_unique(call_user_func_array('array_merge', $arrPerUnitConditions))
-				) . ')';
+				$arrPerUnitConditions = call_user_func_array('array_merge', $arrPerUnitConditions);
+				$strPerUnitConditions = '(' . implode(') OR (', array_unique($arrPerUnitConditions)) . ')';
 				
 				$objPrice = $this->Database->prepare(
 					'SELECT	p.pid, MIN(p.price) AS price
-					FROM	tl_iso_product_dimension_prices AS p
+					FROM	tl_bbit_iso_dimension_price AS p
 					WHERE	(' . $strPerUnitConditions . ')
 					AND		p.published = \'1\'
 					AND		(p.start = \'\' OR p.start > ' . $intTime . ')
@@ -258,7 +244,10 @@ class Dimension2DProduct extends IsotopeProduct {
 				}
 			}
 		}
-
+		
+		$this->arrData['price'] = $fltPrice;
+		$this->arrData['original_price'] = $fltPrice;
+		
 		return $fltPrice;
 	}
 	
@@ -296,7 +285,7 @@ class Dimension2DProduct extends IsotopeProduct {
 				
 				$objPrice = $this->Database->prepare('
 					SELECT	MIN(price) AS price
-					FROM	tl_iso_product_dimension_prices
+					FROM	tl_bbit_iso_dimension_price
 					WHERE	pid = ?
 					AND		' . $strDimensionCondition . '
 					AND		published = \'1\'
@@ -404,8 +393,8 @@ class Dimension2DProduct extends IsotopeProduct {
 		
 		$objLists = $this->Database->query(
 			'SELECT	d.id, d.mode, d.pricePerUnit,
-					(SELECT MAX(p.price) FROM tl_iso_product_dimension_price AS p WHERE p.pid = d.id) AS maxPrice
-			FROM	tl_iso_product_dimensions AS d
+					(SELECT MAX(p.price) FROM tl_bbit_iso_dimension_price AS p WHERE p.pid = d.id) AS maxPrice
+			FROM	tl_bbit_iso_dimension AS d
 			WHERE	d.id IN (' . implode(',', array_unique($this->arrDimensionData['list'])) . ')'
 		);
 		

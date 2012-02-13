@@ -47,7 +47,7 @@ class FormDimension2D extends Widget {
 		if($this->strTemplate == '') {
 			return '';
 		}
-		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope_dimensions/html/formdimensions.js';
+		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/backboneit_iso_dimension/html/formdimensions.js';
 		ob_start();
 		include $this->getTemplate($this->strTemplate, $this->strFormat);
 		return ob_get_clean();
