@@ -9,4 +9,5 @@
 system/*
 !system/modules
 system/modules/*
-!system/modules/isotope_dimensions/
+!system/modules/backboneit_iso_dimension/
+!system/modules/isotope_backboneit_iso_dimension/
