@@ -21,20 +21,17 @@ $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_min']
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_max']
 	= array('Max. Fläche', '');
 
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_input']	= array(
-	'Maße',
-	'x' => 'Breite (in %s)',
-	'y' => 'Höhe (in %s)'
-);
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_input']
+	= array('Maße', '');
 
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errConversion']
-	= 'Beide Umrechnungswerte müssen angegeben werden und größer als 0 sein.';
+//$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errConversion']
+//	= 'Beide Umrechnungswerte müssen angegeben werden und größer als 0 sein.';
 
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errPositive']
 	= 'Geben Sie bitte nur positive Zahlen ein.';
 	
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_noPrices']
-	= 'Es sind keine Preise verfügbar.';
+	= 'In dieser Größe ist das Produkt nicht verfügbar.';
 	
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_xAdjustMinMax']
 	= 'Bei einer Höhe von %s muss die Breite zwischen %s und %s liegen.';

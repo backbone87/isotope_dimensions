@@ -1,13 +1,13 @@
 <?php
 
-$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
+$GLOBALS['TL_DCA']['tl_bbit_iso_dimension_price'] = array(
 
 	'config' => array(
 		'dataContainer'		=> 'Table',
 		'enableVersioning'	=> true,
-		'ptable'			=> 'tl_iso_product_dimensions',
+		'ptable'			=> 'tl_bbit_iso_dimension',
 		'onload_callback'	=> array(
-			array('tl_iso_product_dimension_prices', 'selectPalette'),
+			array('Dimension2DProductCallbacks', 'selectPalette'),
 		),
 	),
 
@@ -17,9 +17,9 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 			'fields'				=> array('dimension_x', 'dimension_y'),
 			'flag'					=> 1,
 			'panelLayout'			=> 'filter;search,limit',
-			'headerFields'			=> array('name', 'mode', 'unit'),
+			'headerFields'			=> array('name', 'mode', 'pricePerUnit', 'unit'),
 			'disableGrouping'		=> true,
-			'child_record_callback'	=> array('DimensionProductCallbacks', 'listPrice')
+			'child_record_callback'	=> array('Dimension2DProductCallbacks', 'listPrice')
 		),
 		'global_operations' => array(
 			'all' => array(
@@ -31,23 +31,23 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 		),
 		'operations' => array(
 			'edit' => array(
-				'label'	=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['edit'],
+				'label'	=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['edit'],
 				'href'	=> 'act=edit',
 				'icon'	=> 'edit.gif'
 			),
 			'copy' => array(
-				'label'	=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['copy'],
+				'label'	=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['copy'],
 				'href'	=> 'act=copy',
 				'icon'	=> 'copy.gif'
 			),
 			'delete' => array(
-				'label'	=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['delete'],
+				'label'	=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['delete'],
 				'href'	=> 'act=delete',
 				'icon'	=> 'delete.gif',
-				'attributes'			=> 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes' => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
 			'show' => array(
-				'label'	=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['show'],
+				'label'	=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['show'],
 				'href'	=> 'act=show',
 				'icon'	=> 'show.gif'
 			),
@@ -59,14 +59,14 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 			. '{price_legend},price;'
 			. '{publish_legend},published,start,stop',
 			
-		'area'			=> '{dimension_legend},area;'
+		'content'		=> '{dimension_legend},content;'
 			. '{price_legend},price;'
 			. '{publish_legend},published,start,stop',
 	),
 
 	'fields' => array(
 		'dimension_x' => array(
-			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['dimension_x'],
+			'label'		=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['dimension_x'],
 			'exclude'	=> true,
 			'filter'	=> true,
 			'inputType'	=> 'text',
@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 			),
 		),
 		'dimension_y' => array(
-			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['dimension_y'],
+			'label'		=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['dimension_y'],
 			'exclude'	=> true,
 			'filter'	=> true,
 			'inputType'	=> 'text',
@@ -89,8 +89,8 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 				'tl_class'	=> 'w50'
 			),
 		),
-		'area' => array(
-			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['area'],
+		'content' => array(
+			'label'		=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['content'],
 			'exclude'	=> true,
 			'filter'	=> true,
 			'inputType'	=> 'text',
@@ -102,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 			),
 		),
 		'price' => array(
-			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['price'],
+			'label'		=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['price'],
 			'exclude'	=> true,
 			'search'	=> true,
 			'inputType'	=> 'text',
@@ -114,7 +114,7 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 			),
 		),
 		'published' => array(
-			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['published'],
+			'label'		=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['published'],
 			'exclude'	=> true,
 			'filter'	=> true,
 			'inputType'	=> 'checkbox',
@@ -123,17 +123,17 @@ $GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'] = array(
 			),
 		),
 		'start' => array(
-			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['start'],
+			'label'		=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['start'],
 			'exclude'	=> true,
 			'inputType'	=> 'text',
 			'eval'		=> array(
 				'rgxp'		=> 'date',
 				'datepicker'=> true,
-				'tl_class'	=> 'w50 wizard'
+				'tl_class'	=> 'clr w50 wizard'
 			),
 		),
 		'stop' => array(
-			'label'		=> &$GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['stop'],
+			'label'		=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['stop'],
 			'exclude'	=> true,
 			'inputType'	=> 'text',
 			'eval'		=> array(

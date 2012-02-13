@@ -1,10 +1,10 @@
 <?php
 
-class FormDimensions extends Widget {
+class FormDimension2D extends Widget {
 
 	protected $blnSubmitInput = true;
 
-	protected $strTemplate = 'form_dimensions';
+	protected $strTemplate = 'form_dimension_2d';
 	
 	public function __construct($arrAttributes = false) {
 		$this->arrConfiguration['rgxp'] = 'digit';

@@ -8,8 +8,16 @@ $arrTableRename = array(
 		'new'	=> 'tl_iso_product_dimension_prices',
 	),
 	array(
+		'old'	=> 'tl_iso_product_dimension_prices',
+		'new'	=> 'tl_bbit_iso_dimension_price',
+	),
+	array(
 		'old'	=> 'tl_product_dimensions',
 		'new'	=> 'tl_iso_product_dimensions',
+	),
+	array(
+		'old'	=> 'tl_iso_product_dimensions',
+		'new'	=> 'tl_bbit_iso_dimension',
 	),
 );
 
@@ -31,13 +39,13 @@ $arrValueTransform = array(
 		'new'		=> 'bbit_iso_dimension_2d',
 	),
 	array(
-		'table'		=> 'tl_iso_product_dimensions',
+		'table'		=> 'tl_bbit_iso_dimension',
 		'column'	=> 'mode',
 		'old'		=> array('dimensions'),
 		'new'		=> 'dimension_2d',
 	),
 	array(
-		'table'		=> 'tl_iso_product_dimensions',
+		'table'		=> 'tl_bbit_iso_dimension',
 		'column'	=> 'mode',
 		'old'		=> array('area'),
 		'new'		=> 'content',
@@ -60,3 +68,4 @@ foreach($arrValueTransform as $arrTransform) {
 		WHERE `' . $arrTransform['column'] . '` IN (' . $strWildcards . ')'
 	)->execute($arrParams);
 }
+//*/

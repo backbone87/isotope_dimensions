@@ -32,10 +32,10 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_list'] = arr
 		'fixed'				=> true
 	),
 	'save_callback'	=> array(
-		array('DimensionProductCallbacks', 'saveList')
+		array('Dimension2DProductCallbacks', 'saveList')
 	),
 );
-		
+
 $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_inputConversion'] = array(
 	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_inputConversion'],
 	'inputType'		=> 'text',
@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_inputConvers
 		'fixed'				=> true
 	),
 	'save_callback'	=> array(
-		array('DimensionProductCallbacks', 'saveConversion')
+		array('Dimension2DProductCallbacks', 'saveConversion')
 	),
 );
 
@@ -107,22 +107,21 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_rules'] = ar
 		'fixed'				=> true
 	),
 	'save_callback'	=> array(
-		array('DimensionProductCallbacks', 'saveRules')
+		array('Dimension2DProductCallbacks', 'saveRules')
 	),
 );
 
-$GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_input'] = array(
-	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_input'],
-	'inputType'		=> 'bbit_iso_dimension',
+$GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_2d_input'] = array(
+	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_2d_input'],
+	'inputType'		=> 'bbit_iso_dimension_2d',
 	'eval'			=> array(
 		'mandatory'			=> true,
-		'ordinateLabels'	=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_input'],
 	),
 	'attributes'	=> array(
-		'type'				=> 'bbit_iso_dimension',
+		'type'				=> 'bbit_iso_dimension_2d',
 		'variant_option'	=> true
 	),
 	'save_callback'	=> array(
-		array('DimensionProductCallbacks', 'saveDimensions')
+		array('Dimension2DProductCallbacks', 'saveDimensions')
 	),
 );

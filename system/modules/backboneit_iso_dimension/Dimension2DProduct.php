@@ -1,6 +1,6 @@
 <?php
 
-class DimensionProduct extends IsotopeProduct {
+class Dimension2DProduct extends IsotopeProduct {
 
 	public function __construct($arrData, $arrOptions=null, $blnLocked=false) {
 		if($arrOptions) {
@@ -31,6 +31,13 @@ class DimensionProduct extends IsotopeProduct {
 				
 			case 'dimension_unit':
 				return deserialize($this->arrData['bbit_iso_dimension_inputUnit'], true);
+				break;
+				
+			case 'dimension_labels':
+				$arrLabels = deserialize($this->arrType['bbit_iso_dimension_labels'], true);
+				$arrLabels[0] || $arrLabels[0] = 'x';
+				$arrLabels[1] || $arrLabels[1] = 'y';
+				return $arrLabels;
 				break;
 				
 			case 'dimension_list':
@@ -81,14 +88,6 @@ class DimensionProduct extends IsotopeProduct {
 		$this->injectAttribute(true);
 		$arrOptions = parent::generateAjax($objModule);
 		$this->injectAttribute(false);
-
-//		$arrOptions[] = array(
-//			'id'	=> $this->formSubmit . '_price',
-//			'html'	=> '<div class="iso_attribute" id="' . $this->formSubmit . '_price">'
-//				. $this->formatted_available_price
-//				. '</div>'
-//		);
-
 		return $arrOptions;
 	}
 	
@@ -97,13 +96,14 @@ class DimensionProduct extends IsotopeProduct {
 		
 		if($arrData['eval']['rgxp'] == 'price') {
 			if(!$this->is_determined_price) {
-				return '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price">'
-					. sprintf($GLOBALS['TL_LANG']['MSC']['priceRangeLabel'], $this->formatted_price)
-					. '</div>';
+				$strReturn = sprintf($GLOBALS['TL_LANG']['MSC']['priceRangeLabel'], $this->formatted_price);
 					
 			} elseif($this->price <= 0) {
+				$strReturn = $GLOBALS['TL_LANG']['MSC']['priceNA'];
+			}
+			if($strReturn) {
 				return '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price">'
-					. $GLOBALS['TL_LANG']['MSC']['priceNA']
+					. $strReturn
 					. '</div>';
 			}
 		}
@@ -426,12 +426,12 @@ class DimensionProduct extends IsotopeProduct {
 	
 	protected function injectAttribute($blnInject) {
 		if($blnRemove) {
-			$GLOBALS['ISO_ATTR']['bbit_iso_dimension'] = array(
-				'class'		=> 'FormDimensions',
-				'callback'	=> array(array('DimensionProductCallbacks', 'injectFormDimensionUnit')),
+			$GLOBALS['ISO_ATTR']['bbit_iso_dimension_2d'] = array(
+				'class'		=> 'FormDimension2D',
+				'callback'	=> array(array('Dimension2DProductCallbacks', 'callbackFormDimension2D')),
 			);
 		} else {
-			unset($GLOBALS['ISO_ATTR']['bbit_iso_dimension']);
+			unset($GLOBALS['ISO_ATTR']['bbit_iso_dimension_2d']);
 		}
 	}
 	

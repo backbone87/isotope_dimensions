@@ -1,19 +1,20 @@
 <?php
 
-class DimensionProductCallbacks extends Controller {
+class Dimension2DProductCallbacks extends Controller {
 	
-	public function injectFormDimensionUnit($strField, $arrConfig, $objProduct) {
-		if(!($objProduct instanceof DimensionProduct)) {
+	public function callbackFormDimension2D($strField, $arrConfig, $objProduct) {
+		if(!($objProduct instanceof Dimension2DProduct)) {
 			return $arrConfig;
 		}
 		
 		$arrConfig['eval']['unit'] = array_combine(array('x', 'y'), $objProduct->dimension_unit);
+		$arrConfig['eval']['ordinateLabels'] = array_combine(array('x', 'y'), $objProduct->dimension_labels);
 		
 		return $arrConfig;
 	}
 
 	public function saveDimensions($varValue, $objProduct) {
-		if(!($objProduct instanceof DimensionProduct)) {
+		if(!($objProduct instanceof Dimension2DProduct)) {
 			return $varValue;
 		}
 		
@@ -38,7 +39,7 @@ class DimensionProductCallbacks extends Controller {
 			FROM	tl_iso_producttypes
 			WHERE	id = ?
 			AND		`class` = ?'
-		)->execute($objDC->type, 'bbit_iso_dimension');
+		)->execute($objDC->type, 'bbit_iso_dimension_2d');
 		
 		if(!$objType->numRows) {
 			return $varValue;
@@ -86,25 +87,29 @@ class DimensionProductCallbacks extends Controller {
 			$strEndDate		= $this->parseDate($GLOBALS['TL_CONFIG']['dateFormat'], $row['stop']);
 			$strStartStop	= ' <span style="color:#b3b3b3; padding-left:3px;">[';
 			if(strlen($row['start']) && strlen($row['stop'])) {
-				$strStartStop .= sprintf($GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['labelStartStop'],
+				$strStartStop .= sprintf($GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['labelStartStop'],
 					$strStartDate,
 					$strEndDate
 				);
 			
 			} elseif (strlen($row['start'])) {
-				$strStartStop = sprintf($GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['labelStart'],
+				$strStartStop = sprintf($GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['labelStart'],
 					$strStartDate
 				);
 			
 			} else {
-				$strStartStop = sprintf($GLOBALS['TL_LANG']['tl_iso_product_dimension_prices']['labelStop'],
+				$strStartStop = sprintf($GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['labelStop'],
 					$strEndDate
 				);
 			}
 			$strStartStop .= ']</span>';
 		}
 		
-		$objConfig = $this->Database->execute("SELECT mode, unit FROM tl_iso_product_dimensions WHERE id={$row['pid']}");
+		$objConfig = $this->Database->query(
+			'SELECT	mode, unit
+			FROM	tl_bbit_iso_dimension
+			WHERE	id = ' . $row['pid']
+		);
 
 		switch($objConfig->mode) {
 			case 'content':
@@ -150,11 +155,11 @@ class DimensionProductCallbacks extends Controller {
 		
 		$objConfig = $this->Database->execute(
 			'SELECT	mode, unit
-			FROM	tl_iso_product_dimensions
-			WHERE	id IN (SELECT pid FROM tl_iso_product_dimension_prices WHERE id = ?)'
+			FROM	tl_bbit_iso_dimension
+			WHERE	id IN (SELECT pid FROM tl_bbit_iso_dimension_price WHERE id = ?)'
 		)->execute($objDC->id);
 
-		$arrDCA = &$GLOBALS['TL_DCA']['tl_iso_product_dimension_prices'];
+		$arrDCA = &$GLOBALS['TL_DCA']['tl_bbit_iso_dimension_price'];
 		$arrDCA['palettes']['default'] = $arrDCA['palettes'][$objConfig->mode];
 
 		switch($objConfig->mode) {
@@ -162,12 +167,12 @@ class DimensionProductCallbacks extends Controller {
 				unset($arrDCA['fields']['dimension_x']);
 				unset($arrDCA['fields']['dimension_y']);
 
-				$arrDCA['fields']['area']['label'][0] .= " ({$objConfig->unit})";
+				$arrDCA['fields']['content']['label'][0] .= " ({$objConfig->unit})";
 				break;
 
 			case 'dimension_2d':
 			default:
-				unset($arrDCA['fields']['area']);
+				unset($arrDCA['fields']['content']);
 
 				$arrDCA['fields']['dimension_x']['label'][0] .= " ({$objConfig->unit})";
 				$arrDCA['fields']['dimension_y']['label'][0] .= " ({$objConfig->unit})";
