@@ -1,6 +1,6 @@
 <?php
 
-$GLOBALS['TL_DCA']['tl_iso_producttypes']['palettes']['bbit_iso_dimension']
+$GLOBALS['TL_DCA']['tl_iso_producttypes']['palettes']['bbit_iso_dimension_2d']
 	= '{name_legend},name,class,fallback;'
 	. '{dimension_legend},bbit_iso_dimension_labels;'
 	. '{description_legend:hide},description;'

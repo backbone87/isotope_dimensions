@@ -7,7 +7,7 @@ class Dimension2DProduct extends IsotopeProduct {
 			$arrOptions = array_merge(array('bbit_iso_dimension_2d_input' => null), $arrOptions);
 		}
 		parent::__construct($arrData, $arrOptions, $blnLocked);
-//		$this->arrAttributes = array_merge(array('bbit_iso_dimension_2d_input'), (array) $this->arrAttributes);
+		$this->arrAttributes = array_merge(array('bbit_iso_dimension_2d_input'), (array) $this->arrAttributes);
 		$this->arrVariantAttributes = array_merge(array('bbit_iso_dimension_2d_input'), (array) $this->arrVariantAttributes);
 	}
 
@@ -89,7 +89,7 @@ class Dimension2DProduct extends IsotopeProduct {
 				$strReturn = $GLOBALS['TL_LANG']['MSC']['priceNA'];
 			}
 			if($strReturn) {
-				return '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price">'
+				return '<div class="iso_attribute" id="' . $this->formSubmit . '_price">'
 					. $strReturn
 					. '</div>';
 			}

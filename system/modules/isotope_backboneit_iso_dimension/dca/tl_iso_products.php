@@ -21,7 +21,7 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_inputUnit'] 
 $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_list'] = array(
 	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_list'],
 	'inputType'		=> 'select',
-	'foreignKey'	=> 'tl_iso_product_dimensions.name',
+	'foreignKey'	=> 'tl_bbit_iso_dimension.name',
 	'eval'			=> array(
 		'mandatory'			=> true,
 		'includeBlankOption'=> true,
@@ -67,37 +67,37 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_rules'] = ar
 				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_x_min'],
 				'exclude'	=> true,
 				'inputType'	=> 'text',
-				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:80px')
 			),
 			'x_max'	=> array(
 				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_x_max'],
 				'exclude'	=> true,
 				'inputType'	=> 'text',
-				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:80px')
 			),
 			'y_min'	=> array(
 				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_y_min'],
 				'exclude'	=> true,
 				'inputType'	=> 'text',
-				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:80px')
 			),
 			'y_max'	=> array(
 				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_y_max'],
 				'exclude'	=> true,
 				'inputType'	=> 'text',
-				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:80px')
 			),
 			'area_min' => array(
 				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_min'],
 				'exclude'	=> true,
 				'inputType'	=> 'text',
-				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:80px')
 			),
 			'area_max' => array(
 				'label'		=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_max'],
 				'exclude'	=> true,
 				'inputType'	=> 'text',
-				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:100px')
+				'eval'		=> array('rgxp' => 'digit', 'maxlength' => 64, 'style' => 'width:80px')
 			),
 		),
 		'tl_class'			=> 'clr',
