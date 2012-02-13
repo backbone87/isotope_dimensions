@@ -26,21 +26,9 @@ foreach($arrTableRename as $arrRename) {
 $arrValueTransform = array(
 	array(
 		'table'		=> 'tl_iso_producttypes',
-		'column'	=> 'bbit_iso_dimension_inputType',
-		'old'		=> array(''),
-		'new'		=> 'dimension_2d',
-	),
-	array(
-		'table'		=> 'tl_iso_producttypes',
-		'column'	=> 'bbit_iso_dimension_listType',
-		'old'		=> array(''),
-		'new'		=> 'dimension',
-	),
-	array(
-		'table'		=> 'tl_iso_producttypes',
 		'column'	=> 'class',
-		'old'		=> array('dimension'),
-		'new'		=> 'bbit_iso_dimension',
+		'old'		=> array('dimension', 'bbit_iso_dimension'),
+		'new'		=> 'bbit_iso_dimension_2d',
 	),
 	array(
 		'table'		=> 'tl_iso_product_dimensions',

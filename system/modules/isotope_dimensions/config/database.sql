@@ -13,6 +13,7 @@ CREATE TABLE `tl_iso_product_dimensions` (
   `name` varchar(255) NOT NULL default '',
   `mode` varchar(255) NOT NULL default '',
   `unit` varchar(255) NOT NULL default '',
+  `pricePerUnit` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -40,10 +41,3 @@ CREATE TABLE `tl_iso_products` (
   `bbit_iso_dimension_inputConversion` blob NULL,
   `bbit_iso_dimension_rules` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE `tl_iso_producttypes` (
-  `bbit_iso_dimension_inputType` varchar(255) NOT NULL default '',
-  `bbit_iso_dimension_listType` varchar(255) NOT NULL default '',
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
