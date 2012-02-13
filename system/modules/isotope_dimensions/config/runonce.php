@@ -37,10 +37,22 @@ $arrValueTransform = array(
 		'new'		=> 'dimension',
 	),
 	array(
+		'table'		=> 'tl_iso_producttypes',
+		'column'	=> 'class',
+		'old'		=> array('dimension'),
+		'new'		=> 'bbit_iso_dimension',
+	),
+	array(
 		'table'		=> 'tl_iso_product_dimensions',
 		'column'	=> 'mode',
 		'old'		=> array('dimensions'),
 		'new'		=> 'dimension_2d',
+	),
+	array(
+		'table'		=> 'tl_iso_product_dimensions',
+		'column'	=> 'mode',
+		'old'		=> array('area'),
+		'new'		=> 'content',
 	),
 );
 

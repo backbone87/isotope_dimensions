@@ -2,18 +2,6 @@
 
 class DimensionProductCallbacks extends Controller {
 	
-	public function addPriceToProduct($objTemplate, $objProduct) {
-		if(!($objProduct instanceof DimensionProduct)) {
-			return $objTemplate;
-		}
-		
-		$objTemplate->price = '<div class="iso_attribute" id="' . $objProduct->formSubmit . '_price">'
-			. $objProduct->formatted_available_price
-			. '</div>';
-
-		return $objTemplate;
-	}
-	
 	public function injectFormDimensionUnit($strField, $arrConfig, $objProduct) {
 		if(!($objProduct instanceof DimensionProduct)) {
 			return $arrConfig;
@@ -23,13 +11,22 @@ class DimensionProductCallbacks extends Controller {
 		
 		return $arrConfig;
 	}
-	
+
 	public function saveDimensions($varValue, $objProduct) {
 		if(!($objProduct instanceof DimensionProduct)) {
 			return $varValue;
 		}
 		
 		$objProduct->validateDimension($varValue['x'], $varValue['y']);
+		
+		return $varValue;
+	}
+	
+	public function saveConversion($varValue, $objDC) {
+		$varValue = array_map('floatval', deserialize($varValue, true));
+		
+		$varValue[0] > 0 || $varValue[0] = '';
+		$varValue[1] > 0 || $varValue[1] = '';
 		
 		return $varValue;
 	}
@@ -50,31 +47,26 @@ class DimensionProductCallbacks extends Controller {
 		return $varValue;
 	}
 	
-	public function saveArea($varValue, $objDC) {
-		$varValue = deserialize($varValue, true);
-		$this->adjustMinMaxValues($varValue[0], $varValue[1]);
-		return $varValue;
-	}
-	
 	public function saveRules($varValue, $objDC) {
 		$varValue = deserialize($varValue, true);
 		foreach($varValue as &$arrRule) {
 			$this->adjustMinMaxValues($arrRule['x_min'], $arrRule['x_max']);
 			$this->adjustMinMaxValues($arrRule['y_min'], $arrRule['y_max']);
+			$this->adjustMinMaxValues($arrRule['area_min'], $arrRule['area_max']);
 		}
 		return $varValue;
 	}
 	
 	protected function adjustMinMaxValues(&$fltMin, &$fltMax) {
-		if(!strlen($fltMin) || $fltMin <= 0) {
+		$fltMin = floatval($fltMin);
+		$fltMax = floatval($fltMax);
+		if($fltMin <= 0) {
 			$fltMin = '';
 		}
-		if(strlen($fltMax)) {
-			if(strlen($fltMin) && $fltMax < $fltMin) {
-				$fltMax = $fltMin;
-			} elseif($fltMax <= 0) {
-				$fltMax = '';
-			}
+		if($fltMax <= 0) {
+			$fltMax = '';
+		} else {
+			$fltMax = max($fltMax, $fltMin);
 		}
 	}
 	
@@ -115,14 +107,14 @@ class DimensionProductCallbacks extends Controller {
 		$objConfig = $this->Database->execute("SELECT mode, unit FROM tl_iso_product_dimensions WHERE id={$row['pid']}");
 
 		switch($objConfig->mode) {
-			/*case 'area':
+			case 'content':
 					$strValue = number_format(
 						$row['area'],
 						0,
 						$GLOBALS['TL_LANG']['MSC']['decimalSeparator'],
 						$GLOBALS['TL_LANG']['MSC']['thousandsSeparator']
 					) . $objConfig->unit;
-				break;*/
+				break;
 
 			case 'dimension_2d':
 			default:
@@ -166,12 +158,12 @@ class DimensionProductCallbacks extends Controller {
 		$arrDCA['palettes']['default'] = $arrDCA['palettes'][$objConfig->mode];
 
 		switch($objConfig->mode) {
-			/*case 'area':
+			case 'content':
 				unset($arrDCA['fields']['dimension_x']);
 				unset($arrDCA['fields']['dimension_y']);
 
 				$arrDCA['fields']['area']['label'][0] .= " ({$objConfig->unit})";
-				break;*/
+				break;
 
 			case 'dimension_2d':
 			default:

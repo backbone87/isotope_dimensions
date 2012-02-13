@@ -16,8 +16,7 @@ $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'bbit_iso_dimension_inp
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'bbit_iso_dimension_list';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'bbit_iso_dimension_inputUnit';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'bbit_iso_dimension_inputConversion';
-$GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'bbit_iso_dimension_area';
 $GLOBALS['ISO_PRODUCT']['regular']['disabledFields'][] = 'bbit_iso_dimension_rules';
 
-$GLOBALS['ISO_HOOKS']['generateProduct'][] = array('DimensionProductCallbacks', 'addPriceToProduct');
+//$GLOBALS['ISO_HOOKS']['generateProduct'][] = array('DimensionProductCallbacks', 'addPriceToProduct');
 

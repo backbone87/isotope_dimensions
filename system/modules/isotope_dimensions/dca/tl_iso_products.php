@@ -3,7 +3,7 @@
 $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_inputUnit'] = array(
 	'label'			=> &$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_inputUnit'],
 	'inputType'		=> 'text',
-	'default'		=> array('cm', 'cm', 'cm'),
+	'default'		=> array('cm', 'cm'),
 	'eval'			=> array(
 		'mandatory'			=> true,
 		'maxlength'			=> 255,
@@ -51,6 +51,9 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_inputConvers
 	'attributes'	=> array(
 		'legend'			=> 'pricing_legend',
 		'fixed'				=> true
+	),
+	'save_callback'	=> array(
+		array('DimensionProductCallbacks', 'saveConversion')
 	),
 );
 
@@ -101,6 +104,7 @@ $GLOBALS['TL_DCA']['tl_iso_products']['fields']['bbit_iso_dimension_rules'] = ar
 	),
 	'attributes'	=> array(
 		'legend'			=> 'pricing_legend',
+		'fixed'				=> true
 	),
 	'save_callback'	=> array(
 		array('DimensionProductCallbacks', 'saveRules')
