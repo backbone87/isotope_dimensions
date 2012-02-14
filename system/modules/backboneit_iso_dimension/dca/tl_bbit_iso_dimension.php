@@ -31,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_bbit_iso_dimension'] = array(
 		'operations' => array(
 			'edit' => array(
 				'label'	=> &$GLOBALS['TL_LANG']['tl_bbit_iso_dimension']['edit'],
-				'href'	=> 'table=tl_iso_product_dimension_prices',
+				'href'	=> 'table=tl_bbit_iso_dimension_price',
 				'icon'	=> 'edit.gif',
 			),
 			'copy' => array(

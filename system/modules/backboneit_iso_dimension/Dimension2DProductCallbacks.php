@@ -93,12 +93,12 @@ class Dimension2DProductCallbacks extends Controller {
 				);
 			
 			} elseif (strlen($row['start'])) {
-				$strStartStop = sprintf($GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['labelStart'],
+				$strStartStop .= sprintf($GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['labelStart'],
 					$strStartDate
 				);
 			
 			} else {
-				$strStartStop = sprintf($GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['labelStop'],
+				$strStartStop .= sprintf($GLOBALS['TL_LANG']['tl_bbit_iso_dimension_price']['labelStop'],
 					$strEndDate
 				);
 			}
@@ -141,7 +141,7 @@ class Dimension2DProductCallbacks extends Controller {
 		}
 		
 		return sprintf('<div class="list_icon" style="background-image:url(%s);">%s: %s%s</div>',
-			$this->generateImage($image),
+			sprintf('system/themes/%s/images/%s', $this->getTheme(), $image),
 			$strValue,
 			$this->Isotope->formatPriceWithCurrency($row['price'], false),
 			$strStartStop
@@ -153,7 +153,7 @@ class Dimension2DProductCallbacks extends Controller {
 			return;
 		}
 		
-		$objConfig = $this->Database->execute(
+		$objConfig = $this->Database->prepare(
 			'SELECT	mode, unit
 			FROM	tl_bbit_iso_dimension
 			WHERE	id IN (SELECT pid FROM tl_bbit_iso_dimension_price WHERE id = ?)'
@@ -182,6 +182,7 @@ class Dimension2DProductCallbacks extends Controller {
 	
 	protected function __construct() {
 		parent::__construct();
+		$this->import('Database');
 	}
 	
 	protected function __clone() {

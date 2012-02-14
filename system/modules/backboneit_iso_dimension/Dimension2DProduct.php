@@ -7,8 +7,9 @@ class Dimension2DProduct extends IsotopeProduct {
 			$arrOptions = array_merge(array('bbit_iso_dimension_2d_input' => null), $arrOptions);
 		}
 		parent::__construct($arrData, $arrOptions, $blnLocked);
-		$this->arrAttributes = array_merge(array('bbit_iso_dimension_2d_input'), (array) $this->arrAttributes);
-		$this->arrVariantAttributes = array_merge(array('bbit_iso_dimension_2d_input'), (array) $this->arrVariantAttributes);
+		
+		$this->arrAttributes[] = 'bbit_iso_dimension_2d_input';
+		$this->arrVariantAttributes[] = 'price';
 	}
 
 	public function __get($strKey) {
@@ -57,7 +58,7 @@ class Dimension2DProduct extends IsotopeProduct {
 				
 			case 'price':
 			case 'tax_free_price':
-				$this->blnLocked || $this->arrData['price'] || $this->findDimensionPrice();
+				$this->blnLocked || $this->findDimensionPrice();
 				break;
 		}
 
@@ -80,7 +81,6 @@ class Dimension2DProduct extends IsotopeProduct {
 	
 	protected function generateAttribute($attribute, $varValue) {
 		$arrData = $GLOBALS['TL_DCA']['tl_iso_products']['fields'][$attribute];
-		
 		if($arrData['eval']['rgxp'] == 'price') {
 			if(!$this->is_determined_price) {
 				$strReturn = sprintf($GLOBALS['TL_LANG']['MSC']['priceRangeLabel'], $this->formatted_price);
@@ -98,8 +98,17 @@ class Dimension2DProduct extends IsotopeProduct {
 		return parent::generateAttribute($attribute, $varValue);
 	}
 
-	private function findDimensionPrice() {
+	private $strCacheKey;
+	
+	private function findDimensionPrice($blnCache = true) {
 		$arrDimensionData = $this->getDimensionData();
+		
+		$strCacheKey = $this->dimension_x . ',' . $this->dimension_y;
+		if($blnCache && isset($this->arrData['price']) && $strCacheKey == $this->strCacheKey) {
+			return;
+		}
+		$this->strCacheKey = $strCacheKey;
+		
 		if(!$arrDimensionData['maxPrice']) {
 			$fltPrice = 0;
 			
@@ -205,7 +214,7 @@ class Dimension2DProduct extends IsotopeProduct {
 					$fltPrice = min($fltPrice, $fltMaxPrice);
 				}
 			}
-		
+			
 			$intTime = time();
 			
 			if($arrConditions) {
@@ -247,8 +256,6 @@ class Dimension2DProduct extends IsotopeProduct {
 		
 		$this->arrData['price'] = $fltPrice;
 		$this->arrData['original_price'] = $fltPrice;
-		
-		return $fltPrice;
 	}
 	
 	public function validateDimension($fltX, $fltY) {
@@ -317,6 +324,7 @@ class Dimension2DProduct extends IsotopeProduct {
 			throw new Exception($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_noPrices']);
 		}
 		
+//		var_dump($arrAllXPartMatches, $arrAllYPartMatches);
 		$strError = 'NOT YET IMPLEMENTED';
 //		$arrUnit = $this->dimension_unit;
 //		$strError = '';
@@ -403,9 +411,9 @@ class Dimension2DProduct extends IsotopeProduct {
 		}
 		
 		foreach($this->arrDimensionData['list'] as $intID => $intListID) {
-			$this->arrDimensionData['mode'][$intID] = $arrList[$intListID]['mode'];
-			$this->arrDimensionData['pricePerUnit'][$intID] = $arrList[$intListID]['pricePerUnit'];
-			$this->arrDimensionData['maxPrice'][$intID] = $arrList[$intListID]['maxPrice'];
+			$this->arrDimensionData['mode'][$intID] = $arrLists[$intListID]['mode'];
+			$this->arrDimensionData['pricePerUnit'][$intID] = $arrLists[$intListID]['pricePerUnit'];
+			$this->arrDimensionData['maxPrice'][$intID] = $arrLists[$intListID]['maxPrice'];
 		}
 		
 		asort($this->arrDimensionData['maxPrice']);
@@ -414,7 +422,7 @@ class Dimension2DProduct extends IsotopeProduct {
 	}
 	
 	protected function injectAttribute($blnInject) {
-		if($blnRemove) {
+		if($blnInject) {
 			$GLOBALS['ISO_ATTR']['bbit_iso_dimension_2d'] = array(
 				'class'		=> 'FormDimension2D',
 				'callback'	=> array(array('Dimension2DProductCallbacks', 'callbackFormDimension2D')),
