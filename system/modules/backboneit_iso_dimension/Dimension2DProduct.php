@@ -31,14 +31,11 @@ class Dimension2DProduct extends IsotopeProduct {
 				break;
 				
 			case 'dimension_unit':
-				return deserialize($this->arrData['bbit_iso_dimension_inputUnit'], true);
-				break;
-				
-			case 'dimension_labels':
-				$arrLabels = deserialize($this->arrType['bbit_iso_dimension_labels'], true);
-				strlen($arrLabels[0]) || $arrLabels[0] = 'x';
-				strlen($arrLabels[1]) || $arrLabels[1] = 'y';
-				return $arrLabels;
+				$strAtt = 'bbit_iso_dimension_inputUnit';
+				if(!isset($this->arrCache[$strAtt])) {
+					$this->arrCache[$strAtt] = deserialize($this->arrData[$strAtt], true);
+				}
+				return $this->arrCache[$strAtt];
 				break;
 				
 			case 'dimension_list':
@@ -46,19 +43,38 @@ class Dimension2DProduct extends IsotopeProduct {
 				break;
 				
 			case 'dimension_conversion':
-				$arrConv = deserialize($this->arrData['bbit_iso_dimension_inputConversion'], true);
-				$arrConv[0] = strlen($arrConv[0]) ? floatval($arrConv[0]) : 1.0;
-				$arrConv[1] = strlen($arrConv[1]) ? floatval($arrConv[1]) : 1.0;
-				return $arrConv;
+				$strAtt = 'bbit_iso_dimension_inputConversion';
+				if(!isset($this->arrCache[$strAtt])) {
+					$arrConv = deserialize($this->arrData[$strAtt], true);
+					$arrConv[0] = strlen($arrConv[0]) ? floatval($arrConv[0]) : 1.0;
+					$arrConv[1] = strlen($arrConv[1]) ? floatval($arrConv[1]) : 1.0;
+					$this->arrCache[$strAtt] = $arrConv;
+				}
+				return $this->arrCache[$strAtt];
 				break;
 				
 			case 'dimension_rules':
-				return deserialize($this->arrData['bbit_iso_dimension_rules'], true);
+				$strAtt = 'bbit_iso_dimension_rules';
+				if(!isset($this->arrCache[$strAtt])) {
+					$this->arrCache[$strAtt] = deserialize($this->arrData[$strAtt], true);
+				}
+				return $this->arrCache[$strAtt];
+				break;
+				
+			case 'dimension_labels':
+				$strAtt = 'bbit_iso_dimension_labels';
+				if(!isset($this->arrCache[$strAtt])) {
+					$arrLabels = deserialize($this->arrType[$strAtt], true);
+					strlen($arrLabels[0]) || $arrLabels[0] = 'x';
+					strlen($arrLabels[2]) || $arrLabels[2] = 'y';
+					$this->arrCache[$strAtt] = $arrLabels;
+				}
+				return $this->arrCache[$strAtt];
 				break;
 				
 			case 'price':
 			case 'tax_free_price':
-				$this->blnLocked || $this->findDimensionPrice();
+				$this->blnLocked || $this->findDimPrice();
 				break;
 		}
 
@@ -98,28 +114,28 @@ class Dimension2DProduct extends IsotopeProduct {
 		return parent::generateAttribute($attribute, $varValue);
 	}
 
-	private $strCacheKey;
+	private $strDimPriceKey;
 	
-	private function findDimensionPrice($blnCache = true) {
-		$arrDimensionData = $this->getDimensionData();
+	private function findDimPrice($blnCache = true) {
+		$arrDimData = $this->getDimData();
 		
-		$strCacheKey = $this->dimension_x . ',' . $this->dimension_y;
-		if($blnCache && isset($this->arrData['price']) && $strCacheKey == $this->strCacheKey) {
+		$strDimPriceKey = $this->dimension_x . ',' . $this->dimension_y;
+		if($blnCache && isset($this->arrData['price']) && $strDimPriceKey == $this->strDimPriceKey) {
 			return;
 		}
-		$this->strCacheKey = $strCacheKey;
+		$this->strDimPriceKey = $strDimPriceKey;
 		
-		if(!$arrDimensionData['maxPrice']) {
+		if(!$arrDimData['maxPrice']) {
 			$fltPrice = 0;
 			
 		} elseif($this->dimension_input) {
-			if(!isset($this->arrDimensionPrices)) {
+			if(!isset($this->arrDimPrices)) {
 				try {
-					$this->validateDimension($this->dimension_x, $this->dimension_y);
+					$this->validateDim($this->dimension_x, $this->dimension_y);
 				} catch(Exception $e) {
 				}
 			}
-			$fltPrice = $this->arrDimensionPrices ? reset($this->arrDimensionPrices) : 0;
+			$fltPrice = $this->arrDimPrices ? reset($this->arrDimPrices) : 0;
 			
 		} else {
 			$fltPrice = INF;
@@ -128,19 +144,19 @@ class Dimension2DProduct extends IsotopeProduct {
 			$arrPerUnitConditions = array();
 			$arrMinAreas = array();
 			
-			foreach($arrDimensionData['maxPrice'] as $intID => $fltMaxPrice) {
-				$arrConv = $arrDimensionData['conversion'][$intID];
-				$strList = 'p.pid = ' . $arrDimensionData['list'][$intID];
+			foreach($arrDimData['maxPrice'] as $intID => $fltMaxPrice) {
+				$arrConv = $arrDimData['conversion'][$intID];
+				$strList = 'p.pid = ' . $arrDimData['list'][$intID];
 				$arrRules = array();
 				$fltMinArea = INF;
 				
-				if($arrDimensionData['mode'][$intID] == 'content') {
-					foreach($arrDimensionData['rules'][$intID] as $arrRule) {
+				if($arrDimData['listMode'][$intID] == 'content') {
+					foreach($arrDimData['rules'][$intID] as $arrRule) {
 						$fltArea = $arrRule['area_min'] * $arrConv[0]^2;
 						$fltCalcArea = $arrRule['x_min'] * $arrConv[0] * $arrRule['y_min'] * $arrConv[1];
 						
 						if($fltArea <= 0 && $fltCalcArea <= 0) {
-							if($arrDimensionData['pricePerUnit'][$intID]) {
+							if($arrDimData['pricePerUnit'][$intID]) {
 								// very special case, the lowest possible price is arbitrarily close to 0
 								// because this rule does not force a min area
 								unset($arrConditions, $arrPerUnitConditions);
@@ -163,7 +179,7 @@ class Dimension2DProduct extends IsotopeProduct {
 					}
 					
 				} else {
-					foreach($arrDimensionData['rules'][$intID] as $arrRule) {
+					foreach($arrDimData['rules'][$intID] as $arrRule) {
 						if($arrRule['x_min'] <= 0 && $arrRule['y_min'] <= 0 && $arrRule['area_min']) {
 							$arrRules = array($strList);
 							break;
@@ -198,7 +214,7 @@ class Dimension2DProduct extends IsotopeProduct {
 					}
 				}
 				
-				if($arrDimensionData['pricePerUnit'][$intID]) {
+				if($arrDimData['pricePerUnit'][$intID]) {
 					if(is_infinite($fltMinArea)) {
 						// very special case, the lowest possible price is arbitrarily close to 0,
 						// because there are no rules to force a min area
@@ -206,7 +222,7 @@ class Dimension2DProduct extends IsotopeProduct {
 						$fltPrice = 0;
 						break;
 					}
-					$arrMinAreas[$arrDimensionData['list'][$intID]] = $fltMinArea;
+					$arrMinAreas[$arrDimData['list'][$intID]] = $fltMinArea;
 					$arrPerUnitConditions[$intID] = $arrRules ? $arrRules : array($strList);
 					$fltPrice = min($fltPrice, $fltMaxPrice * $fltMinArea);
 				} else {
@@ -258,43 +274,44 @@ class Dimension2DProduct extends IsotopeProduct {
 		$this->arrData['original_price'] = $fltPrice;
 	}
 	
-	public function validateDimension($fltX, $fltY) {
+	protected $arrDimPrices;
+	
+	public function validateDim($fltX, $fltY) {
 		if($fltX <= 0 || $fltY <= 0) {
-			throw new Exception($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_positive']);
+			throw new Exception($GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_positive']);
 		}
 		
-		$intTime = time();
+		$intTime			= time();
+		$arrDimData			= $this->getDimData();
+		$this->arrDimPrices	= array();
+		$arrXMatchMin		= array();
+		$arrXMatchMax		= array();
+		$arrYMatchMin		= array();
+		$arrYMatchMax		= array();
 		
-		$arrDimensionData = $this->getDimensionData();
-		
-		$this->arrDimensionPrices = array();
-		
-		$arrAllXPartMatches = array();
-		$arrAllYPartMatches = array();
-		
-		foreach($arrDimensionData['maxPrice'] as $intID => $fltMaxPrice) {
-			$arrConv = $arrDimensionData['conversion'][$intID];
-			$arrRules = $arrDimensionData['rules'][$intID];
-			$fltConvX = $fltX * $arrConv[0];
-			$fltConvY = $fltY * $arrConv[1];
+		foreach($arrDimData['maxPrice'] as $intID => $fltMaxPrice) {
+			$arrConv	= $arrDimData['conversion'][$intID];
+			$arrRules	= $arrDimData['rules'][$intID];
+			$fltConvX	= $fltX * $arrConv[0];
+			$fltConvY	= $fltY * $arrConv[1];
 			
 			if($this->matchRules($arrRules, $arrConv, $fltX, $fltY, $arrXPartMatches, $arrYPartMatches)) {
-				$arrParams = array($arrDimensionData['list'][$intID]);
+				$arrParams = array($arrDimData['list'][$intID]);
 				
-				if($arrDimensionData['mode'][$intID] == 'dimension_2d') {
-					$arrParams[] = $fltConvX;
-					$arrParams[] = $fltConvY;
-					$strDimensionCondition = 'dimension_x >= ? AND dimension_y >= ?';
+				if($arrDimData['listMode'][$intID] == 'dimension_2d') {
+					$arrParams[]	= $fltConvX;
+					$arrParams[]	= $fltConvY;
+					$strCondition	= 'dimension_x >= ? AND dimension_y >= ?';
 				} else {
-					$arrParams[] = $fltConvX * $fltConvY;
-					$strDimensionCondition = 'content >= ?';
+					$arrParams[]	= $fltConvX * $fltConvY;
+					$strCondition	= 'content >= ?';
 				}
 				
 				$objPrice = $this->Database->prepare('
 					SELECT	MIN(price) AS price
 					FROM	tl_bbit_iso_dimension_price
 					WHERE	pid = ?
-					AND		' . $strDimensionCondition . '
+					AND		' . $strCondition . '
 					AND		published = \'1\'
 					AND		(start = \'\' OR start > ' . $intTime . ')
 					AND		(stop = \'\' OR stop < ' . $intTime . ')
@@ -302,123 +319,197 @@ class Dimension2DProduct extends IsotopeProduct {
 				')->execute($arrParams);
 				
 				$fltPrice = $objPrice->numRows ? $objPrice->price : $fltMaxPrice;
-				$arrDimensionData['pricePerUnit'][$intID] && $fltPrice *= $fltConvX * $fltConvY;
+				$arrDimData['pricePerUnit'][$intID] && $fltPrice *= $fltConvX * $fltConvY;
 				
-				$this->arrDimensionPrices[$intListID . ',' . $fltX . ',' . $fltY] = $fltPrice;
+				$strKey = $arrDimData['list'][$intID] . ',' . $fltX . ',' . $fltY;
+				if(!isset($this->arrDimPrices[$strKey]) || $this->arrDimPrices[$strKey] > $fltPrice) {
+					$this->arrDimPrices[$strKey] = $fltPrice;
+				}
 				
-			} elseif($arrXPartMatches) {
-				$arrAllXPartMatches[$intID] = $arrXPartMatches;
-				
-			} elseif($arrYPartMatches) {
-				$arrAllYPartMatches[$intID] = $arrYPartMatches;
-				
+			} else {
+				if($arrXPartMatches) foreach($arrXPartMatches as $arrMatch) {
+					$arrXMatchMin[] = $arrMatch[0];
+					$arrXMatchMax[] = $arrMatch[1];
+				}
+				if($arrYPartMatches) foreach($arrYPartMatches as $arrMatch) {
+					$arrYMatchMin[] = $arrMatch[0];
+					$arrYMatchMax[] = $arrMatch[1];
+				}
 			}
 		}
 		
-		if($this->arrDimensionPrices) {
-			asort($this->arrDimensionPrices);
+		if($this->arrDimPrices) {
+			asort($this->arrDimPrices);
+//			var_dump($this->arrDimPrices);
 			return;
 		}
 	
-		if(!$arrAllXPartMatches && !$arrAllYPartMatches) {
-			throw new Exception($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_noPrices']);
+		if(!$arrXMatchMin && !$arrYMatchMin) {
+			throw new Exception($GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errNoPrices']);
 		}
 		
-//		var_dump($arrAllXPartMatches, $arrAllYPartMatches);
-		$strError = 'NOT YET IMPLEMENTED';
-//		$arrUnit = $this->dimension_unit;
-//		$strError = '';
-//		if(isset($fltMaxX)) {
-//			if($fltMinX > 0) {
-//				$strError .= sprintf($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_xAdjustMinMax'], $fltY . $arrUnit[1], $fltMinX . $arrUnit[0], $fltMaxX . $arrUnit[0]);
-//			} else {
-//				$strError .= sprintf($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_xAdjustMax'], $fltY . $arrUnit[1], $fltMaxX . $arrUnit[0]);
-//			}
-//			$strConjunction = '<br />';
-//		}
-//		if(isset($fltMaxY)) {
-//			$strError .= $strConjunction;
-//			if($fltMinY > 0) {
-//				$strError .= sprintf($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_yAdjustMinMax'], $fltX . $arrUnit[0], $fltMinY . $arrUnit[1], $fltMaxY . $arrUnit[1]);
-//			} else {
-//				$strError .= sprintf($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_yAdjustMax'], $fltX . $arrUnit[0], $fltMaxY . $arrUnit[1]);
-//			}
-//		}
-//		if(!$strError) {
-//			/*if(!$blnListMaxOK) {
-//				$strError = $GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_noSizePrices'];
-//				
-//			} elseif(!$blnAreaOK) {
-//				$strError = sprintf($GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_area'], $fltMinArea . $arrUnit[0], $fltMaxArea . $arrUnit[0]);
-//				
-//			} else*/ {
-//				$strError = $GLOBALS['ISO_LANG']['ERR']['bbit_iso_dimension_noSizePrices'];
-//				
-//			}
-//		}
+//		var_dump($arrXMatchMin, $arrXMatchMax, $arrYMatchMin, $arrYMatchMax);
+		
+		$arrUnit	= $this->dimension_unit;
+		$arrLabels	= $this->dimension_labels;
+		$strRanges	= $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errRanges'];
+		$strMinMax	= $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMinMax'];
+		$strMax		= $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMax'];
+		$strMin		= $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMin'];
+		
+		if($arrXMatchMin) {
+			array_multisort($arrXMatchMin, SORT_NUMERIC, SORT_ASC, $arrXMatchMax, SORT_NUMERIC, SORT_DESC);
+			
+			// join overlapping ranges
+			$arrRanges = array();
+			$arrRange = array($arrXMatchMin[0], $arrXMatchMax[0]);
+			for($i = 1, $n = count($arrXMatchMin); $i < $n; $i++) {
+				if($arrRange[1] < $arrXMatchMin[$i]) { // hole
+					$arrRanges[] = $arrRange;
+					$arrRange = array($arrXMatchMin[$i], $arrXMatchMax[$i]);
+					
+				} elseif($arrRange[1] < $arrXMatchMax[$i]) { // new max
+					$arrRange[1] = $arrXMatchMax[$i];
+				}
+				
+				while($arrXMatchMin[$i + 1] == $arrRange[0]) $i++;
+			}
+			$arrRanges[] = $arrRange;
+			
+			foreach($arrRanges as &$arrRange) {
+				if($arrRange[0] == 0) {
+					$arrRange = sprintf($strMax, $arrRange[1], $arrUnit[1]);
+					
+				} elseif(is_infinite($arrRange[1])) {
+					$arrRange = sprintf($strMin, $arrRange[0], $arrUnit[1]);
+					
+				} else {
+					$arrRange = sprintf($strMinMax, $arrRange[0], $arrUnit[1], $arrRange[1], $arrUnit[1]);
+				}
+			}
+			$strError = sprintf($strRanges,
+				$arrLabels[2],
+				$fltX,
+				$arrUnit[0],
+				$arrLabels[0],
+				implode(', ', $arrRanges)
+			);
+			$strConjunction = '<br />';
+		}
+		
+		if($arrYMatchMin) {
+			array_multisort($arrYMatchMin, SORT_NUMERIC, SORT_ASC, $arrYMatchMax, SORT_NUMERIC, SORT_DESC);
+			
+			// join overlapping ranges
+			$arrRanges = array();
+			$arrRange = array($arrYMatchMin[0], $arrYMatchMax[0]);
+			for($i = 1, $n = count($arrYMatchMin); $i < $n; $i++) {
+				if($arrRange[1] < $arrYMatchMin[$i]) { // hole
+					$arrRanges[] = $arrRange;
+					$arrRange = array($arrYMatchMin[$i], $arrYMatchMax[$i]);
+					
+				} elseif($arrRange[1] < $arrYMatchMax[$i]) { // new max
+					$arrRange[1] = $arrYMatchMax[$i];
+				}
+				
+				while($arrYMatchMin[$i + 1] == $arrRange[0]) $i++;
+			}
+			$arrRanges[] = $arrRange;
+			
+			foreach($arrRanges as &$arrRange) {
+				if($arrRange[0] == 0) {
+					$arrRange = sprintf($strMax, $arrRange[1], $arrUnit[0]);
+					
+				} elseif(is_infinite($arrRange[1])) {
+					$arrRange = sprintf($strMin, $arrRange[0], $arrUnit[0]);
+					
+				} else {
+					$arrRange = sprintf($strMinMax, $arrRange[0], $arrUnit[0], $arrRange[1], $arrUnit[0]);
+				}
+			}
+			$strError .= $strConjunction . sprintf($strRanges,
+				$arrLabels[0],
+				$fltY,
+				$arrUnit[1],
+				$arrLabels[2],
+				implode(', ', $arrRanges)
+			);
+		}
 		
 		throw new Exception($strError);
 	}
 	
-	protected $arrDimensionPrices;
+	protected $arrDimData;
 	
-	protected $arrDimensionData;
-	
-	protected function getDimensionData() {
-		if(isset($this->arrDimensionData)) {
-			return $this->arrDimensionData;
+	protected function getDimData() {
+		if(isset($this->arrDimData)) {
+			return $this->arrDimData;
 		}
 		
-		$arrDimensionVariants = array_intersect(
+		$this->arrDimData = array();
+		
+		$arrDimVariant = array_intersect_key(
 			array(
-				'bbit_iso_dimension_rules',
-				'bbit_iso_dimension_conversion',
-				'bbit_iso_dimension_list'
+				'bbit_iso_dimension_list' => true,
+				'bbit_iso_dimension_inputConversion' => true,
+				'bbit_iso_dimension_rules' => true,
 			),
-			$this->arrVariantAttributes
+			array_flip($this->arrVariantAttributes)
 		);
 		
-		$this->arrDimensionData = array();
-		
-		if($this->arrType['variants'] && $this->pid == 0 && $arrDimensionVariants) {
+		if($this->arrType['variants'] && $this->pid == 0 && $arrDimVariant) {
 			$objVariant = clone $this;
-			$blnRulesVariant = in_array('bbit_iso_dimension_rules', $arrDimensionVariants);
-			$blnRulesVariant || $arrRules = $this->dimension_rules;
-			
 			foreach($this->arrVariantOptions['variants'] as $intID => $arrVariantData) {
 				$objVariant->loadVariantData($arrVariantData);
-				$this->arrDimensionData['list'][$intID] = $objVariant->dimension_list;
-				$this->arrDimensionData['conversion'][$intID] = $objVariant->dimension_conversion;
-				$this->arrDimensionData['rules'][$intID] = $blnRulesVariant
-					? $objVariant->dimension_rules
-					: $arrRules;
+				$arrInherit = array_flip(deserialize($arrVariantData['inherit'], true));
+			
+				if(isset($arrDimVariant['bbit_iso_dimension_list'])
+				&& !isset($arrInherit['bbit_iso_dimension_list'])) {
+					$this->arrDimData['list'][$intID] = $objVariant->dimension_list;
+				} else {
+					$this->arrDimData['list'][$intID] = $this->dimension_list;
+				}
+				
+				if(isset($arrDimVariant['bbit_iso_dimension_inputConversion'])
+				&& !isset($arrInherit['bbit_iso_dimension_inputConversion'])) {
+					$this->arrDimData['conversion'][$intID] = $objVariant->dimension_conversion;
+				} else {
+					$this->arrDimData['conversion'][$intID] = $this->dimension_conversion;
+				}
+				
+				if(isset($arrDimVariant['bbit_iso_dimension_rules'])
+				&& !isset($arrInherit['bbit_iso_dimension_rules'])) {
+					$this->arrDimData['rules'][$intID] = $objVariant->dimension_rules;
+				} else {
+					$this->arrDimData['rules'][$intID] = $this->dimension_rules;
+				}
 			}
 		} else {
-			$this->arrDimensionData['list'][$this->id] = $this->dimension_list;
-			$this->arrDimensionData['conversion'][$this->id] = $this->dimension_conversion;
-			$this->arrDimensionData['rules'][$this->id] = $this->dimension_rules;
+			$this->arrDimData['list'][$this->id] = $this->dimension_list;
+			$this->arrDimData['conversion'][$this->id] = $this->dimension_conversion;
+			$this->arrDimData['rules'][$this->id] = $this->dimension_rules;
 		}
 		
 		$objLists = $this->Database->query(
 			'SELECT	d.id, d.mode, d.pricePerUnit,
 					(SELECT MAX(p.price) FROM tl_bbit_iso_dimension_price AS p WHERE p.pid = d.id) AS maxPrice
 			FROM	tl_bbit_iso_dimension AS d
-			WHERE	d.id IN (' . implode(',', array_unique($this->arrDimensionData['list'])) . ')'
+			WHERE	d.id IN (' . implode(',', array_unique($this->arrDimData['list'])) . ')'
 		);
 		
 		while($objLists->next()) {
 			$arrLists[$objLists->id] = $objLists->row();
 		}
 		
-		foreach($this->arrDimensionData['list'] as $intID => $intListID) {
-			$this->arrDimensionData['mode'][$intID] = $arrLists[$intListID]['mode'];
-			$this->arrDimensionData['pricePerUnit'][$intID] = $arrLists[$intListID]['pricePerUnit'];
-			$this->arrDimensionData['maxPrice'][$intID] = $arrLists[$intListID]['maxPrice'];
+		foreach($this->arrDimData['list'] as $intID => $intListID) {
+			$this->arrDimData['listMode'][$intID] = $arrLists[$intListID]['mode'];
+			$this->arrDimData['pricePerUnit'][$intID] = $arrLists[$intListID]['pricePerUnit'];
+			$this->arrDimData['maxPrice'][$intID] = $arrLists[$intListID]['maxPrice'];
 		}
 		
-		asort($this->arrDimensionData['maxPrice']);
+		asort($this->arrDimData['maxPrice']);
 		
-		return $this->arrDimensionData;
+		return $this->arrDimData;
 	}
 	
 	protected function injectAttribute($blnInject) {
@@ -458,11 +549,12 @@ class Dimension2DProduct extends IsotopeProduct {
 			}
 			
 			if($blnXMatch) {
-				$arrPart['y_min'] = $fltX * $arrRule['y_min'] * $fltYToXConv < $arrRule['area_min']
+				$arrPart = array();
+				$arrPart[] = $fltX * $arrRule['y_min'] * $fltYToXConv < $arrRule['area_min']
 					? $arrRule['area_min'] / $fltX / $fltYToXConv
 					: $arrRule['y_min'];
 				
-				$arrPart['y_max'] = $fltX * $arrRule['y_max'] * $fltYToXConv > $arrRule['area_max']
+				$arrPart[] = $fltX * $arrRule['y_max'] * $fltYToXConv > $arrRule['area_max']
 					? $arrRule['area_max'] / $fltX / $fltYToXConv
 					: $arrRule['y_max'];
 				
@@ -470,11 +562,12 @@ class Dimension2DProduct extends IsotopeProduct {
 			}
 			
 			if($blnYMatch) {
-				$arrPart['x_min'] = $arrRule['x_min'] * $fltY * $fltYToXConv < $arrRule['area_min']
+				$arrPart = array();
+				$arrPart[] = $arrRule['x_min'] * $fltY * $fltYToXConv < $arrRule['area_min']
 					? $arrRule['area_min'] / ($fltY * $fltYToXConv)
 					: $arrRule['x_min'];
 				
-				$arrPart['x_max'] = $arrRule['x_max'] * $fltY * $fltYToXConv > $arrRule['area_max']
+				$arrPart[] = $arrRule['x_max'] * $fltY * $fltYToXConv > $arrRule['area_max']
 					? $arrRule['area_max'] / ($fltY * $fltYToXConv)
 					: $arrRule['x_max'];
 				

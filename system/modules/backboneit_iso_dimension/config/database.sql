@@ -43,5 +43,5 @@ CREATE TABLE `tl_iso_products` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tl_iso_producttypes` (
-  `bbit_iso_dimension_labels` varchar(255) NOT NULL default '',
+  `bbit_iso_dimension_labels` blob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

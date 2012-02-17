@@ -30,17 +30,17 @@ $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_input']
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errPositive']
 	= 'Geben Sie bitte nur positive Zahlen ein.';
 	
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_noPrices']
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errNoPrices']
 	= 'In dieser Größe ist das Produkt nicht verfügbar.';
 	
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_xAdjustMinMax']
-	= 'Bei einer Höhe von %s muss die Breite zwischen %s und %s liegen.';
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errRanges']
+	= 'Gültige Werte für %s bei %.0f%s %s: %s';
 	
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_xAdjustMax']
-	= 'Bei einer Höhe von %s beträgt die maximale Breite %s.';
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMinMax']
+	= '%.0f%s bis %.0f%s';
 	
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_yAdjustMinMax']
-	= 'Bei einer Breite von %s muss die Höhe zwischen %s und %s liegen.';
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMax']
+	= 'bis zu %.0f%s';
 	
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_yAdjustMax']
-	= 'Bei einer Breite von %s beträgt die maximale Höhe %s.';
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMin']
+	= 'ab %.0f%s';

@@ -8,7 +8,11 @@ class Dimension2DProductCallbacks extends Controller {
 		}
 		
 		$arrConfig['eval']['unit'] = array_combine(array('x', 'y'), $objProduct->dimension_unit);
-		$arrConfig['eval']['ordinateLabels'] = array_combine(array('x', 'y'), $objProduct->dimension_labels);
+		$arrLabels = $objProduct->dimension_labels;
+		$arrConfig['eval']['ordinateLabels'] = array(
+			'x' => trim($arrLabels[0] . ' ' . $arrLabels[1]),
+			'y' => trim($arrLabels[2] . ' ' . $arrLabels[3])
+		);
 		
 		return $arrConfig;
 	}
@@ -18,7 +22,7 @@ class Dimension2DProductCallbacks extends Controller {
 			return $varValue;
 		}
 		
-		$objProduct->validateDimension($varValue['x'], $varValue['y']);
+		$objProduct->validateDim($varValue['x'], $varValue['y']);
 		
 		return $varValue;
 	}
