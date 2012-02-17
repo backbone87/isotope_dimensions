@@ -1,17 +1,37 @@
 <?php if ($this->tableless): ?>
 <div class="form_dimension_2d" id="ctrl_<?php echo $this->strId; ?>">
 <h4><?php echo $this->strLabel; ?></h4>
-<?php foreach(array('x', 'y') as $strOrdinate): ?>
-<label for="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"<?php if($this->strClass) echo ' class="', $this->strClass, '"'; ?>
-><?php if($this->required): ?><span class="invisible"><?php echo $GLOBALS['TL_LANG']['MSC']['mandatory']; ?></span> <?php endif; ?>
-<?php echo sprintf($this->ordinateLabels[$strOrdinate], $this->unit[$strOrdinate]); ?>
-<?php if($this->required): ?><span class="mandatory">*</span><?php endif; ?></label>
-<input type="text" name="<?php echo $this->strName; ?>[<?php echo $strOrdinate; ?>]" id="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"
-class="text dimensions_<?php echo $strOrdinate; if($this->strClass) echo ' ', $this->strClass; ?>" value="<?php echo specialchars($this->varValue[$strOrdinate]); ?>"
-<?php echo $this->getAttributes(); ?> />
-<?php endforeach; ?>
+<?php if($this->required): ?>
+	<?php foreach(array('x', 'y') as $strOrdinate): ?>
+		<div class="dimension_<?php echo $strOrdinate, ' ', $this->strClass; ?>">
+			<label for="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"
+				><span class="invisible"><?php echo $GLOBALS['TL_LANG']['MSC']['mandatory']; ?></span> 
+				<?php echo sprintf($this->ordinateLabels[$strOrdinate], $this->unit[$strOrdinate]);
+				?><span class="mandatory">*</span></label>
+			<input type="text" class="text"
+				name="<?php echo $this->strName; ?>[<?php echo $strOrdinate; ?>]"
+				id="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"
+				value="<?php echo specialchars($this->varValue[$strOrdinate]); ?>"
+				<?php echo $this->getAttributes(); ?> />
+		</div>
+	<?php endforeach; ?>
+<?php else: ?>
+	<?php foreach(array('x', 'y') as $strOrdinate): ?>
+		<div class="dimension_<?php echo $strOrdinate, ' ', $this->strClass; ?>">
+			<label for="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"
+				><?php echo sprintf($this->ordinateLabels[$strOrdinate], $this->unit[$strOrdinate]);
+				?></label>
+			<input type="text" class="text"
+				name="<?php echo $this->strName; ?>[<?php echo $strOrdinate; ?>]"
+				id="ctrl_<?php echo $this->strId; ?>_<?php echo $strOrdinate; ?>"
+				value="<?php echo specialchars($this->varValue[$strOrdinate]); ?>"
+				<?php echo $this->getAttributes(); ?> />
+		</div>
+	<?php endforeach; ?>
+<?php endif; ?>
 <?php echo $this->addSubmit(); ?>
 <?php echo $this->getErrorAsHTML(); ?>
 </div>
-<?php else: ?>
+<?php else: // TODO ?>
+
 <?php endif; ?>

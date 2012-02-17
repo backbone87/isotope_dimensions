@@ -21,7 +21,7 @@ $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_min']
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_area_max']
 	= array('Max. Fläche', '');
 
-$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_input']
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_2d_input']
 	= array('Maße', '');
 
 //$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errConversion']
