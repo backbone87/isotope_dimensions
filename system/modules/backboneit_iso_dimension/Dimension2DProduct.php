@@ -81,6 +81,37 @@ class Dimension2DProduct extends IsotopeProduct {
 		return parent::__get($strKey);
 	}
 	
+	public function getOptions($blnRaw = false) {
+		if($blnRaw) {
+			return parent::getOptions(true);
+		}
+
+		$arrOptions = array();
+		if($this->dimension_input) {
+			$arrLabels = $this->dimension_labels;
+			$arrUnit = $this->dimension_unit;
+			$arrOptions[] = array(
+				'label' => $arrLabels[0],
+				'value' => sprintf('%.0f%s', $this->dimension_x, $arrUnit[0])
+			);
+			$arrOptions[] = array(
+				'label' => $arrLabels[2],
+				'value' => sprintf('%.0f%s', $this->dimension_y, $arrUnit[1])
+			);
+		}
+		
+		$arrInput = $this->arrOptions['bbit_iso_dimension_2d_input'];
+		unset($this->arrOptions['bbit_iso_dimension_2d_input']);
+		
+		$arrOptions = array_merge($arrOptions, parent::getOptions());
+		
+		if($arrInput) {
+			$this->arrOptions['bbit_iso_dimension_2d_input'] = $arrInput;
+		}
+
+		return $arrOptions;
+	}
+	
 	public function generate($strTemplate, &$objModule) {
 		$this->injectAttribute(true);
 		$strReturn = parent::generate($strTemplate, $objModule);
@@ -180,7 +211,7 @@ class Dimension2DProduct extends IsotopeProduct {
 					
 				} else {
 					foreach($arrDimData['rules'][$intID] as $arrRule) {
-						if($arrRule['x_min'] <= 0 && $arrRule['y_min'] <= 0 && $arrRule['area_min']) {
+						if($arrRule['x_min'] <= 0 && $arrRule['y_min'] <= 0 && $arrRule['area_min'] <= 0) {
 							$arrRules = array($strList);
 							break;
 						}
@@ -344,11 +375,11 @@ class Dimension2DProduct extends IsotopeProduct {
 			return;
 		}
 	
+//		var_dump($arrXMatchMin, $arrXMatchMax, $arrYMatchMin, $arrYMatchMax);
+		
 		if(!$arrXMatchMin && !$arrYMatchMin) {
 			throw new Exception($GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errNoPrices']);
 		}
-		
-//		var_dump($arrXMatchMin, $arrXMatchMax, $arrYMatchMin, $arrYMatchMax);
 		
 		$arrUnit	= $this->dimension_unit;
 		$arrLabels	= $this->dimension_labels;
@@ -507,6 +538,7 @@ class Dimension2DProduct extends IsotopeProduct {
 			$this->arrDimData['maxPrice'][$intID] = $arrLists[$intListID]['maxPrice'];
 		}
 		
+		$this->arrDimData['maxPrice'] = array_filter($this->arrDimData['maxPrice'], 'is_scalar');
 		asort($this->arrDimData['maxPrice']);
 		
 		return $this->arrDimData;
