@@ -488,7 +488,7 @@ class Dimension2DProduct extends IsotopeProduct {
 			array_flip($this->arrVariantAttributes)
 		);
 		
-		if($this->arrType['variants'] && $this->pid == 0 && $arrDimVariant) {
+		if($this->arrType['variants'] && $this->pid == 0 && $arrDimVariant && count($this->arrVariantOptions['variants'])) {
 			$objVariant = clone $this;
 			foreach($this->arrVariantOptions['variants'] as $intID => $arrVariantData) {
 				$objVariant->loadVariantData($arrVariantData);
