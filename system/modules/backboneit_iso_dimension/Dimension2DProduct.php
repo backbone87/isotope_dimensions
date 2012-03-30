@@ -308,10 +308,6 @@ class Dimension2DProduct extends IsotopeProduct {
 	protected $arrDimPrices;
 	
 	public function validateDim($fltX, $fltY) {
-		if($fltX <= 0 || $fltY <= 0) {
-			throw new Exception($GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_positive']);
-		}
-		
 		$intTime			= time();
 		$arrDimData			= $this->getDimData();
 		$this->arrDimPrices	= array();

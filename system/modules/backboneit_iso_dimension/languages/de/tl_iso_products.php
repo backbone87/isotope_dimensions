@@ -27,9 +27,12 @@ $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_2d_input']
 //$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errConversion']
 //	= 'Beide Umrechnungswerte müssen angegeben werden und größer als 0 sein.';
 
+$GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMandatory']
+	= 'Geben Sie bitte Breite und Höhe an.';
+
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errPositive']
 	= 'Geben Sie bitte nur positive Zahlen ein.';
-	
+
 $GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errNoPrices']
 	= 'In dieser Größe ist das Produkt nicht verfügbar.';
 	

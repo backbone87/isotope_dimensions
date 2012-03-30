@@ -7,7 +7,6 @@ class FormDimension2D extends Widget {
 	protected $strTemplate = 'form_dimension_2d';
 	
 	public function __construct($arrAttributes = false) {
-		$this->arrConfiguration['rgxp'] = 'digit';
 		parent::__construct($arrAttributes);
 	}
 
@@ -31,9 +30,32 @@ class FormDimension2D extends Widget {
 	}
 	
 	protected function validator($varInput) {
-		$varInput = parent::validator($varInput);
+		$varInput = array_slice(deserialize($varInput, true), 0, 2);
+		
+		if(2 !== count(array_filter($varInput, 'strlen'))) {
+			$this->addError($GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errMandatory']);
+		}
+		
+		foreach($varInput as &$fltInput) {
+			$fltInput = str_replace(',', '.', $fltInput);
+		}
+		
+		if(2 !== count(array_filter($varInput, 'is_numeric'))) {
+			$this->addError($GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errPositive']);
+		}
+		
+		$varInput = array_map('floatval', $varInput);
+		
+		foreach($varInput as $fltInput) {
+			if($fltInput <= 0) {
+				$this->addError($GLOBALS['TL_LANG']['tl_iso_products']['bbit_iso_dimension_errPositive']);
+				break;
+			}
+		}
+		
 		if($this->hasErrors()) {
 			$this->blnSubmitInput = false;
+			return '';
 		}
 		return $varInput;
 	}
